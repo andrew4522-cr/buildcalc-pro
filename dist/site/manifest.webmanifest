@@ -1,0 +1,9 @@
+{
+  "name": "BuildCalc Pro \u2014 Contractor Estimator & Invoice Suite",
+  "short_name": "BuildCalc Pro",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#f59e0b",
+  "description": "Offline feet-inches-fraction construction calculator & 60-second client PDF quote generator."
+}

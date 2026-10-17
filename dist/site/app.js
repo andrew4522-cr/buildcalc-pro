@@ -1,0 +1,1100 @@
+// ============================================================================
+// BuildCalc Pro — Core Trade Math, Feet-Inches Parser & PDF Quote Engine
+// 100% Client-Side (Zero Backend Cost) + Gumroad/LemonSqueezy License Verifier
+// ============================================================================
+
+const CONFIG = {
+  GUMROAD_PRODUCT_PERMALINK: "BuildCalcPro",
+  CHECKOUT_URL: "https://andrewverse7567.gumroad.com/l/BuildCalcPro",
+  DEMO_KEYS: ["DEMO-PRO-2026", "BUILDCALC-VIP-UNLOCK"]
+};
+
+// State
+let state = {
+  activeTab: window.DEFAULT_TAB || "concrete",
+  isPro: false,
+  licenseKey: "",
+  company: {
+    name: "",
+    phone: "",
+    email: "",
+    licenseNum: "",
+    address: "",
+    logoDataUrl: ""
+  },
+  quote: {
+    docType: "ESTIMATE",
+    number: "EST-" + Math.floor(1000 + Math.random() * 9000),
+    date: new Date().toISOString().slice(0, 10),
+    validDays: 30,
+    clientName: "",
+    clientPhone: "",
+    clientEmail: "",
+    jobAddress: "",
+    taxRate: 7.5,
+    markupRate: 15,
+    depositPct: 30,
+    notes: "Price includes standard materials and labor as specified above. Valid for 30 days. 30% deposit required to schedule work.",
+    items: []
+  },
+  savedQuotes: []
+};
+
+// Parse feet-inches-fractions strings like:
+// "14' 6-3/8\"", "14 6 3/8", "14.5", "12'6\"", "180in"
+function parseDimensionToFeet(input) {
+  if (typeof input === "number") return input;
+  if (!input) return 0;
+  let s = String(input).trim().toLowerCase();
+  if (!s) return 0;
+
+  // Pure inches suffix e.g. "144in" or "36\""
+  if (/^\d+(\.\d+)?\s*(in|inch|inches|")$/.test(s) && !s.includes("'")) {
+    return parseFloat(s) / 12.0;
+  }
+
+  // Standard decimal feet e.g. "14.5" or "14.5'"
+  if (/^-?\d+(\.\d+)?\s*('|ft|feet)?$/.test(s)) {
+    return parseFloat(s);
+  }
+
+  // Normalize symbols
+  s = s.replace(/feet|ft/g, "'").replace(/inches|inch|in/g, '"');
+
+  let feet = 0;
+  let inches = 0;
+
+  // Match feet part if present
+  const ftMatch = s.match(/(\d+(?:\.\d+)?)\s*'/);
+  if (ftMatch) {
+    feet = parseFloat(ftMatch[1]);
+    s = s.slice(ftMatch.index + ftMatch[0].length).trim();
+  }
+
+  s = s.replace(/"/g, "").trim();
+  if (s) {
+    // Handle fraction like "6-3/8" or "6 3/8" or "3/8"
+    const fracMatch = s.match(/^(?:(\d+)\s*[-\s]\s*)?(\d+)\s*\/\s*(\d+)$/);
+    if (fracMatch) {
+      const wholeIn = fracMatch[1] ? parseFloat(fracMatch[1]) : 0;
+      const num = parseFloat(fracMatch[2]);
+      const den = parseFloat(fracMatch[3]) || 1;
+      inches = wholeIn + num / den;
+    } else if (!ftMatch && /^(\d+)\s+(\d+(?:\.\d+)?)$/.test(s)) {
+      // "14 6" -> 14 ft 6 in
+      const parts = s.split(/\s+/);
+      feet = parseFloat(parts[0]);
+      inches = parseFloat(parts[1]);
+    } else {
+      const parsedIn = parseFloat(s);
+      if (!isNaN(parsedIn)) inches = parsedIn;
+    }
+  }
+
+  return feet + inches / 12.0;
+}
+
+function formatFeetInches(decimalFeet) {
+  if (!isFinite(decimalFeet) || decimalFeet <= 0) return "0' 0\"";
+  const totalSixteenths = Math.round(decimalFeet * 12 * 16);
+  const feet = Math.floor(totalSixteenths / (12 * 16));
+  const remSixteenths = totalSixteenths % (12 * 16);
+  const wholeInches = Math.floor(remSixteenths / 16);
+  let num = remSixteenths % 16;
+  let den = 16;
+  if (num > 0) {
+    while (num % 2 === 0 && den % 2 === 0) {
+      num /= 2;
+      den /= 2;
+    }
+    return `${feet}' ${wholeInches > 0 ? wholeInches + "-" : ""}${num}/${den}"`;
+  }
+  return `${feet}' ${wholeInches}"`;
+}
+
+// ============================================================================
+// 8 Core Trade Calculators
+// ============================================================================
+
+const CALCULATORS = {
+  concrete: {
+    title: "Concrete Slab, Footing & Pier Calculator",
+    badge: "Concrete & Masonry",
+    fields: [
+      { id: "c_len", label: "Length (ft / in)", default: "20' 0\"", type: "dim" },
+      { id: "c_wid", label: "Width (ft / in)", default: "12' 0\"", type: "dim" },
+      { id: "c_thick", label: "Thickness (inches)", default: "4", type: "number", step: "0.5" },
+      { id: "c_waste", label: "Waste Factor (%)", default: "10", type: "number" },
+      { id: "c_price_yd", label: "Ready-Mix Price ($ / Cu Yd)", default: "165", type: "number" },
+      { id: "c_labor_sqft", label: "Finishing Labor ($ / Sq Ft)", default: "4.50", type: "number", step: "0.25" }
+    ],
+    compute(v) {
+      const L = parseDimensionToFeet(v.c_len);
+      const W = parseDimensionToFeet(v.c_wid);
+      const T_ft = (parseFloat(v.c_thick) || 4) / 12.0;
+      const waste = 1 + (parseFloat(v.c_waste) || 0) / 100.0;
+      const sqft = L * W;
+      const cuft = sqft * T_ft * waste;
+      const cuyd = cuft / 27.0;
+      const bags80 = Math.ceil(cuft / 0.60);
+      const bags60 = Math.ceil(cuft / 0.45);
+      const rebarFt = Math.ceil((Math.ceil(L / 1.5) * W + Math.ceil(W / 1.5) * L) * 1.1);
+      const matCost = cuyd * (parseFloat(v.c_price_yd) || 165);
+      const laborCost = sqft * (parseFloat(v.c_labor_sqft) || 4.5);
+
+      return {
+        headline: `${cuyd.toFixed(2)} Cubic Yards`,
+        subheadline: `Area: ${sqft.toFixed(1)} sq ft (${formatFeetInches(L)} × ${formatFeetInches(W)}) incl. ${v.c_waste}% waste`,
+        metrics: [
+          { label: "Concrete Volume (Cu Yd)", value: `${cuyd.toFixed(2)} yd³` },
+          { label: "Volume (Cu Ft)", value: `${cuft.toFixed(1)} ft³` },
+          { label: "80 lb Premix Bags", value: `${bags80} bags` },
+          { label: "60 lb Premix Bags", value: `${bags60} bags` },
+          { label: "Rebar Grid (18\" OC)", value: `${rebarFt} lin ft` },
+          { label: "Est. Material + Labor", value: `$${(matCost + laborCost).toFixed(2)}` }
+        ],
+        lineItems: [
+          {
+            desc: `Ready-Mix Concrete (${formatFeetInches(L)} × ${formatFeetInches(W)} @ ${v.c_thick}" thick, +${v.c_waste}% waste)`,
+            qty: Number(cuyd.toFixed(2)),
+            unit: "cu yd",
+            unitCost: parseFloat(v.c_price_yd) || 165
+          },
+          {
+            desc: `Concrete Forming, Pour & Flatwork Finishing (${sqft.toFixed(0)} sq ft)`,
+            qty: Number(sqft.toFixed(1)),
+            unit: "sq ft",
+            unitCost: parseFloat(v.c_labor_sqft) || 4.5
+          }
+        ]
+      };
+    }
+  },
+
+  framing: {
+    title: "Wall Framing, Studs & Sheathing Calculator",
+    badge: "Rough Carpentry",
+    fields: [
+      { id: "f_len", label: "Total Wall Length (ft / in)", default: "48' 0\"", type: "dim" },
+      { id: "f_ht", label: "Wall Height (ft / in)", default: "8' 0\"", type: "dim" },
+      { id: "f_oc", label: "Stud Spacing (inches OC)", default: "16", type: "number" },
+      { id: "f_openings", label: "Doors + Windows Count", default: "3", type: "number" },
+      { id: "f_stud_cost", label: "Price per Stud ($)", default: "3.85", type: "number", step: "0.05" },
+      { id: "f_sheath_cost", label: "OSB 4x8 Sheet Price ($)", default: "18.50", type: "number", step: "0.50" }
+    ],
+    compute(v) {
+      const L = parseDimensionToFeet(v.f_len);
+      const H = parseDimensionToFeet(v.f_ht);
+      const ocFeet = (parseFloat(v.f_oc) || 16) / 12.0;
+      const openings = parseInt(v.f_openings) || 0;
+      const baseStuds = Math.ceil(L / ocFeet) + 1;
+      const cornerAndJackStuds = 6 + openings * 4;
+      const totalStuds = Math.ceil((baseStuds + cornerAndJackStuds) * 1.1);
+      // 3 plates (1 bottom, 2 top)
+      const plateBoards12ft = Math.ceil((L * 3 * 1.1) / 12.0);
+      const wallSqFt = L * H;
+      const osbSheets = Math.ceil((wallSqFt / 32.0) * 1.08);
+      const studPrice = parseFloat(v.f_stud_cost) || 3.85;
+      const sheathPrice = parseFloat(v.f_sheath_cost) || 18.5;
+
+      return {
+        headline: `${totalStuds} Studs + ${plateBoards12ft} Plates`,
+        subheadline: `Wall Area: ${wallSqFt.toFixed(0)} sq ft @ ${v.f_oc}" O.C. (+10% waste & king/jack studs)`,
+        metrics: [
+          { label: "Total Wall Studs", value: `${totalStuds} pcs` },
+          { label: "Top/Bottom Plates (12')", value: `${plateBoards12ft} pcs` },
+          { label: "4×8 OSB Sheathing", value: `${osbSheets} sheets` },
+          { label: "Framing Nails (3-1/4\")", value: `${Math.ceil(totalStuds * 12)} nails` },
+          { label: "Wall Surface Area", value: `${wallSqFt.toFixed(0)} sq ft` },
+          { label: "Lumber Material Subtotal", value: `$${((totalStuds + plateBoards12ft) * studPrice + osbSheets * sheathPrice).toFixed(2)}` }
+        ],
+        lineItems: [
+          {
+            desc: `Dimensional Framing Studs & Plates (${formatFeetInches(L)} wall @ ${v.f_oc}" OC)`,
+            qty: totalStuds + plateBoards12ft,
+            unit: "pcs",
+            unitCost: studPrice
+          },
+          {
+            desc: `7/16" OSB Wall Sheathing (4×8 sheets)`,
+            qty: osbSheets,
+            unit: "sheets",
+            unitCost: sheathPrice
+          }
+        ]
+      };
+    }
+  },
+
+  roofing: {
+    title: "Roof Pitch, Squares & Shingle Bundle Calculator",
+    badge: "Roofing & Exteriors",
+    fields: [
+      { id: "r_len", label: "Building Footprint Length", default: "40' 0\"", type: "dim" },
+      { id: "r_wid", label: "Building Footprint Width", default: "28' 0\"", type: "dim" },
+      { id: "r_pitch", label: "Roof Pitch Rise (X / 12)", default: "6", type: "number" },
+      { id: "r_waste", label: "Hip/Valley Waste (%)", default: "12", type: "number" },
+      { id: "r_bundle_cost", label: "Price per Shingle Bundle ($)", default: "39.00", type: "number" },
+      { id: "r_labor_sq", label: "Install Labor ($ / Square)", default: "185.00", type: "number" }
+    ],
+    compute(v) {
+      const L = parseDimensionToFeet(v.r_len);
+      const W = parseDimensionToFeet(v.r_wid);
+      const rise = parseFloat(v.r_pitch) || 6;
+      const pitchFactor = Math.sqrt(1 + Math.pow(rise / 12.0, 2));
+      const waste = 1 + (parseFloat(v.r_waste) || 12) / 100.0;
+      const flatArea = L * W;
+      const actualRoofArea = flatArea * pitchFactor;
+      const totalWithWaste = actualRoofArea * waste;
+      const squares = totalWithWaste / 100.0;
+      const bundles = Math.ceil(squares * 3);
+      const underlaymentRolls = Math.ceil(actualRoofArea / 1000.0);
+      const ridgeBundles = Math.ceil((L / 33.0) * 1.1);
+      const bCost = parseFloat(v.r_bundle_cost) || 39;
+      const lCost = parseFloat(v.r_labor_sq) || 185;
+
+      return {
+        headline: `${squares.toFixed(2)} Squares (${bundles} Bundles)`,
+        subheadline: `Pitch Multiplier: ${pitchFactor.toFixed(3)}× (${rise}/12 pitch) | Actual Roof: ${actualRoofArea.toFixed(0)} sq ft`,
+        metrics: [
+          { label: "Total Roofing Squares", value: `${squares.toFixed(2)} sq` },
+          { label: "Shingle Bundles (3/sq)", value: `${bundles} bundles` },
+          { label: "Synthetic Underlayment", value: `${underlaymentRolls} rolls (10 sq)` },
+          { label: "Ridge Cap Bundles", value: `${ridgeBundles} bundles` },
+          { label: "Pitch Factor", value: `${pitchFactor.toFixed(3)}×` },
+          { label: "Est. Material + Labor", value: `$${(bundles * bCost + squares * lCost).toFixed(2)}` }
+        ],
+        lineItems: [
+          {
+            desc: `Architectural Roofing Shingles (${rise}/12 pitch, +${v.r_waste}% waste)`,
+            qty: bundles,
+            unit: "bundles",
+            unitCost: bCost
+          },
+          {
+            desc: `Roofing Tear-Off, Underlayment & Installation Labor`,
+            qty: Number(squares.toFixed(2)),
+            unit: "squares",
+            unitCost: lCost
+          }
+        ]
+      };
+    }
+  },
+
+  drywall: {
+    title: "Drywall Sheet, Tape & Joint Compound Estimator",
+    badge: "Drywall & Interior",
+    fields: [
+      { id: "d_len", label: "Room Length (ft / in)", default: "18' 0\"", type: "dim" },
+      { id: "d_wid", label: "Room Width (ft / in)", default: "14' 0\"", type: "dim" },
+      { id: "d_ht", label: "Ceiling Height (ft / in)", default: "9' 0\"", type: "dim" },
+      { id: "d_ceil", label: "Include Ceiling? (1=Yes, 0=No)", default: "1", type: "number" },
+      { id: "d_sheet_cost", label: "4×8 Sheet Cost ($)", default: "15.75", type: "number" },
+      { id: "d_hang_finish", label: "Hang & Tape Labor ($ / Sheet)", default: "48.00", type: "number" }
+    ],
+    compute(v) {
+      const L = parseDimensionToFeet(v.d_len);
+      const W = parseDimensionToFeet(v.d_wid);
+      const H = parseDimensionToFeet(v.d_ht);
+      const incCeil = parseInt(v.d_ceil) !== 0;
+      const wallArea = 2 * (L + W) * H;
+      const ceilArea = incCeil ? L * W : 0;
+      const totalArea = (wallArea + ceilArea) * 1.1; // 10% waste
+      const sheets4x8 = Math.ceil(totalArea / 32.0);
+      const sheets4x12 = Math.ceil(totalArea / 48.0);
+      const mudBuckets = Math.ceil(totalArea / 400.0);
+      const screwsLbs = Math.ceil(sheets4x8 / 8.0);
+      const sCost = parseFloat(v.d_sheet_cost) || 15.75;
+      const lCost = parseFloat(v.d_hang_finish) || 48.0;
+
+      return {
+        headline: `${sheets4x8} Sheets (4×8) or ${sheets4x12} Sheets (4×12)`,
+        subheadline: `Total Surface Area (+10% waste): ${totalArea.toFixed(0)} sq ft`,
+        metrics: [
+          { label: "4×8 Drywall Sheets", value: `${sheets4x8} sheets` },
+          { label: "4×12 Drywall Sheets", value: `${sheets4x12} sheets` },
+          { label: "Joint Compound (5 gal)", value: `${mudBuckets} buckets` },
+          { label: "Drywall Screws", value: `${screwsLbs} lbs` },
+          { label: "Paper Joint Tape", value: `${Math.ceil(totalArea / 250)} rolls` },
+          { label: "Est. Material + Labor", value: `$${(sheets4x8 * (sCost + lCost)).toFixed(2)}` }
+        ],
+        lineItems: [
+          {
+            desc: `1/2" Gypsum Drywall Boards (4×8) + Screws & Joint Compound`,
+            qty: sheets4x8,
+            unit: "sheets",
+            unitCost: sCost
+          },
+          {
+            desc: `Drywall Hanging, Taping & Level-4 Smooth Finish Labor`,
+            qty: sheets4x8,
+            unit: "sheets",
+            unitCost: lCost
+          }
+        ]
+      };
+    }
+  },
+
+  stairs: {
+    title: "Stair Stringer, Rise/Run & IRC Code Calculator",
+    badge: "Finish & Deck Stairs",
+    fields: [
+      { id: "s_rise", label: "Total Floor-to-Floor Rise", default: "9' 2\"", type: "dim" },
+      { id: "s_tread", label: "Target Tread Depth (inches)", default: "10.5", type: "number", step: "0.25" },
+      { id: "s_width", label: "Staircase Width (inches)", default: "36", type: "number" },
+      { id: "s_cost_step", label: "Material + Labor ($ / Step)", default: "95.00", type: "number" }
+    ],
+    compute(v) {
+      const totalRiseIn = parseDimensionToFeet(v.s_rise) * 12.0;
+      const risers = Math.max(1, Math.round(totalRiseIn / 7.35));
+      const actualRiserIn = totalRiseIn / risers;
+      const treads = Math.max(1, risers - 1);
+      const treadDepthIn = parseFloat(v.s_tread) || 10.5;
+      const totalRunIn = treads * treadDepthIn;
+      const stringerLenIn = Math.sqrt(Math.pow(totalRiseIn, 2) + Math.pow(totalRunIn, 2));
+      const widthIn = parseFloat(v.s_width) || 36;
+      const stringerCount = Math.max(3, Math.ceil(widthIn / 16.0) + 1);
+      const codeCompliant = actualRiserIn <= 7.75 && actualRiserIn >= 4.0 && treadDepthIn >= 10.0;
+      const stepPrice = parseFloat(v.s_cost_step) || 95;
+
+      return {
+        headline: `${risers} Risers @ ${actualRiserIn.toFixed(2)}" | ${treads} Treads`,
+        subheadline: `Total Run: ${formatFeetInches(totalRunIn / 12)} | Stringer Length: ${formatFeetInches(stringerLenIn / 12)} (${codeCompliant ? "IRC Code OK ✓" : "Check Local Code !"})`,
+        metrics: [
+          { label: "Number of Risers", value: `${risers} risers` },
+          { label: "Exact Riser Height", value: `${actualRiserIn.toFixed(3)}"` },
+          { label: "Number of Treads", value: `${treads} treads` },
+          { label: "Total Horizontal Run", value: formatFeetInches(totalRunIn / 12) },
+          { label: "2×12 Stringers Needed", value: `${stringerCount} stringers (${Math.ceil(stringerLenIn / 12)}' stock)` },
+          { label: "IRC R311.7 Compliance", value: codeCompliant ? "PASS (≤ 7.75\" rise)" : "ADJUST (Rise > 7.75\")" }
+        ],
+        lineItems: [
+          {
+            desc: `Custom Stair Framing (${risers} risers @ ${actualRiserIn.toFixed(2)}", ${stringerCount} stringers, ${formatFeetInches(totalRunIn / 12)} run)`,
+            qty: risers,
+            unit: "steps",
+            unitCost: stepPrice
+          }
+        ]
+      };
+    }
+  },
+
+  decking: {
+    title: "Decking Boards, Joists & Lumber Board-Foot Calculator",
+    badge: "Decks & Lumber",
+    fields: [
+      { id: "dk_len", label: "Deck Length (ft / in)", default: "20' 0\"", type: "dim" },
+      { id: "dk_wid", label: "Deck Width (ft / in)", default: "14' 0\"", type: "dim" },
+      { id: "dk_board_w", label: "Actual Board Width (in, e.g. 5.5)", default: "5.5", type: "number", step: "0.25" },
+      { id: "dk_sqft_cost", label: "Decking Material ($ / Sq Ft)", default: "9.50", type: "number" },
+      { id: "dk_labor_sqft", label: "Framing + Install ($ / Sq Ft)", default: "18.00", type: "number" }
+    ],
+    compute(v) {
+      const L = parseDimensionToFeet(v.dk_len);
+      const W = parseDimensionToFeet(v.dk_wid);
+      const area = L * W;
+      const bwFeet = ((parseFloat(v.dk_board_w) || 5.5) + 0.125) / 12.0;
+      const linearFeet = Math.ceil((area / bwFeet) * 1.1);
+      const boards16ft = Math.ceil(linearFeet / 16.0);
+      const joists = Math.ceil((L * 12) / 16) + 1;
+      const fasteners = Math.ceil((linearFeet / 1.33) * 2);
+      const mCost = parseFloat(v.dk_sqft_cost) || 9.5;
+      const lCost = parseFloat(v.dk_labor_sqft) || 18.0;
+
+      return {
+        headline: `${boards16ft} Boards (16') | ${linearFeet} Lin Ft`,
+        subheadline: `Deck Footprint: ${area.toFixed(0)} sq ft (${formatFeetInches(L)} × ${formatFeetInches(W)}) incl. 10% waste`,
+        metrics: [
+          { label: "Total Decking Linear Ft", value: `${linearFeet} lin ft` },
+          { label: "16-ft Deck Boards", value: `${boards16ft} boards` },
+          { label: "Substructure Joists (16\" OC)", value: `${joists} joists` },
+          { label: "Deck Screws / Clips", value: `${fasteners} pcs` },
+          { label: "Joist Hangers & Hardware", value: `${joists * 2} hangers` },
+          { label: "Est. Material + Labor", value: `$${(area * (mCost + lCost)).toFixed(2)}` }
+        ],
+        lineItems: [
+          {
+            desc: `Decking Boards, Substructure Joists & Hidden Fasteners (${area.toFixed(0)} sq ft)`,
+            qty: Number(area.toFixed(1)),
+            unit: "sq ft",
+            unitCost: mCost
+          },
+          {
+            desc: `Deck Framing, Footings & Board Installation Labor`,
+            qty: Number(area.toFixed(1)),
+            unit: "sq ft",
+            unitCost: lCost
+          }
+        ]
+      };
+    }
+  },
+
+  paint: {
+    title: "Interior & Exterior Paint + Primer Gallon Calculator",
+    badge: "Painting & Coatings",
+    fields: [
+      { id: "p_area", label: "Paintable Wall/Siding Area (Sq Ft)", default: "1200", type: "number" },
+      { id: "p_coats", label: "Number of Finish Coats", default: "2", type: "number" },
+      { id: "p_cov", label: "Coverage per Gallon (Sq Ft)", default: "350", type: "number" },
+      { id: "p_gal_cost", label: "Paint Price ($ / Gallon)", default: "58.00", type: "number" },
+      { id: "p_labor_sqft", label: "Prep & Paint Labor ($ / Sq Ft)", default: "2.15", type: "number", step: "0.10" }
+    ],
+    compute(v) {
+      const area = parseFloat(v.p_area) || 1200;
+      const coats = parseInt(v.p_coats) || 2;
+      const cov = parseFloat(v.p_cov) || 350;
+      const finishGal = Math.ceil((area * coats) / cov);
+      const primerGal = Math.ceil(area / 400);
+      const galCost = parseFloat(v.p_gal_cost) || 58;
+      const lCost = parseFloat(v.p_labor_sqft) || 2.15;
+
+      return {
+        headline: `${finishGal} Gal Finish Paint + ${primerGal} Gal Primer`,
+        subheadline: `Covering ${area.toLocaleString()} sq ft with ${coats} coats (@ ${cov} sq ft/gal)`,
+        metrics: [
+          { label: "Finish Paint Gallons", value: `${finishGal} gal` },
+          { label: "5-Gallon Buckets Equiv.", value: `${(finishGal / 5).toFixed(1)} buckets` },
+          { label: "Primer / Sealer", value: `${primerGal} gal` },
+          { label: "Painter's Tape & Masking", value: `${Math.ceil(area / 250)} rolls` },
+          { label: "Paint Material Cost", value: `$${((finishGal + primerGal) * galCost).toFixed(2)}` },
+          { label: "Total Material + Labor", value: `$${((finishGal + primerGal) * galCost + area * lCost).toFixed(2)}` }
+        ],
+        lineItems: [
+          {
+            desc: `Premium Architectural Paint & Primer (${coats} coats over ${area} sq ft)`,
+            qty: finishGal + primerGal,
+            unit: "gal",
+            unitCost: galCost
+          },
+          {
+            desc: `Surface Prep, Masking, Caulking & ${coats}-Coat Application Labor`,
+            qty: area,
+            unit: "sq ft",
+            unitCost: lCost
+          }
+        ]
+      };
+    }
+  },
+
+  tile: {
+    title: "Tile, Flooring, Thinset Mortar & Grout Calculator",
+    badge: "Tile & Flooring",
+    fields: [
+      { id: "t_len", label: "Area Length (ft / in)", default: "14' 6\"", type: "dim" },
+      { id: "t_wid", label: "Area Width (ft / in)", default: "10' 6\"", type: "dim" },
+      { id: "t_tile_l", label: "Tile Length (inches)", default: "24", type: "number" },
+      { id: "t_tile_w", label: "Tile Width (inches)", default: "12", type: "number" },
+      { id: "t_waste", label: "Cut & Pattern Waste (%)", default: "12", type: "number" },
+      { id: "t_sqft_cost", label: "Tile + Mortar Cost ($ / Sq Ft)", default: "5.75", type: "number" },
+      { id: "t_labor_sqft", label: "Tile Setting Labor ($ / Sq Ft)", default: "12.50", type: "number" }
+    ],
+    compute(v) {
+      const L = parseDimensionToFeet(v.t_len);
+      const W = parseDimensionToFeet(v.t_wid);
+      const netSqFt = L * W;
+      const waste = 1 + (parseFloat(v.t_waste) || 12) / 100.0;
+      const grossSqFt = netSqFt * waste;
+      const tileSqFt = ((parseFloat(v.t_tile_l) || 24) * (parseFloat(v.t_tile_w) || 12)) / 144.0;
+      const tileCount = Math.ceil(grossSqFt / tileSqFt);
+      const thinsetBags = Math.ceil(grossSqFt / 45.0);
+      const backerBoards = Math.ceil(netSqFt / 15.0);
+      const mCost = parseFloat(v.t_sqft_cost) || 5.75;
+      const lCost = parseFloat(v.t_labor_sqft) || 12.5;
+
+      return {
+        headline: `${tileCount} Tiles (${grossSqFt.toFixed(1)} Sq Ft w/ Waste)`,
+        subheadline: `Net Area: ${netSqFt.toFixed(1)} sq ft (${formatFeetInches(L)} × ${formatFeetInches(W)}) | Tile Size: ${v.t_tile_l}"×${v.t_tile_w}"`,
+        metrics: [
+          { label: "Total Tile Area (+Waste)", value: `${grossSqFt.toFixed(1)} sq ft` },
+          { label: "Individual Tiles Needed", value: `${tileCount} tiles` },
+          { label: "50 lb Thinset Mortar Bags", value: `${thinsetBags} bags` },
+          { label: "3×5 Cement Backer Boards", value: `${backerBoards} boards` },
+          { label: "25 lb Grout Bags", value: `${Math.ceil(grossSqFt / 100)} bags` },
+          { label: "Est. Material + Labor", value: `$${(grossSqFt * mCost + netSqFt * lCost).toFixed(2)}` }
+        ],
+        lineItems: [
+          {
+            desc: `Tile, Thinset Mortar, Backer Board & Grout (${v.t_tile_l}"×${v.t_tile_w}" tile, +${v.t_waste}% waste)`,
+            qty: Number(grossSqFt.toFixed(1)),
+            unit: "sq ft",
+            unitCost: mCost
+          },
+          {
+            desc: `Subfloor Prep, Waterproofing, Tile Layout & Grouting Labor`,
+            qty: Number(netSqFt.toFixed(1)),
+            unit: "sq ft",
+            unitCost: lCost
+          }
+        ]
+      };
+    }
+  }
+};
+
+// ============================================================================
+// UI Controller, Quote/Invoice Builder, Freemium Paywall & PDF Generator
+// ============================================================================
+
+let currentCalcResult = null;
+let lastFocusedInput = null;
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem("buildcalc_pro_state_v1");
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      state.isPro = !!parsed.isPro;
+      state.licenseKey = parsed.licenseKey || "";
+      if (parsed.company) state.company = { ...state.company, ...parsed.company };
+      if (parsed.savedQuotes) state.savedQuotes = parsed.savedQuotes;
+    }
+  } catch (e) {}
+}
+
+function saveState() {
+  try {
+    localStorage.setItem(
+      "buildcalc_pro_state_v1",
+      JSON.stringify({
+        isPro: state.isPro,
+        licenseKey: state.licenseKey,
+        company: state.company,
+        savedQuotes: state.savedQuotes
+      })
+    );
+  } catch (e) {}
+}
+
+function selectTab(tabKey) {
+  if (!CALCULATORS[tabKey]) tabKey = "concrete";
+  state.activeTab = tabKey;
+  document.querySelectorAll("[data-tab-btn]").forEach((btn) => {
+    const active = btn.getAttribute("data-tab-btn") === tabKey;
+    btn.className = active
+      ? "px-3.5 py-2 rounded-lg text-sm font-semibold bg-amber-500 text-slate-950 shadow-sm transition"
+      : "px-3.5 py-2 rounded-lg text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition";
+  });
+  renderCalculatorInputs();
+  recalculate();
+}
+
+function renderCalculatorInputs() {
+  const calc = CALCULATORS[state.activeTab];
+  document.getElementById("calc-title").textContent = calc.title;
+  document.getElementById("calc-badge").textContent = calc.badge;
+
+  const container = document.getElementById("calc-fields");
+  container.innerHTML = "";
+
+  calc.fields.forEach((f) => {
+    const wrap = document.createElement("div");
+    wrap.className = "flex flex-col gap-1";
+    const lbl = document.createElement("label");
+    lbl.className = "text-xs font-semibold uppercase tracking-wider text-slate-400";
+    lbl.textContent = f.label;
+    const inp = document.createElement("input");
+    inp.id = f.id;
+    inp.type = f.type === "dim" ? "text" : "number";
+    if (f.step) inp.step = f.step;
+    inp.value = f.default;
+    inp.className =
+      "w-full rounded-lg bg-slate-900 border border-slate-700 px-3 py-2.5 text-white font-mono text-sm focus:outline-none focus:border-amber-400";
+    inp.addEventListener("input", recalculate);
+    inp.addEventListener("focus", () => {
+      lastFocusedInput = inp;
+    });
+    wrap.appendChild(lbl);
+    wrap.appendChild(inp);
+    container.appendChild(wrap);
+  });
+}
+
+function insertFraction(token) {
+  if (!lastFocusedInput) {
+    const firstDim = document.querySelector("#calc-fields input[type='text']");
+    if (firstDim) lastFocusedInput = firstDim;
+  }
+  if (!lastFocusedInput) return;
+  const cur = lastFocusedInput.value.trim();
+  if (token === "'" || token === '"') {
+    lastFocusedInput.value = cur + token + " ";
+  } else {
+    lastFocusedInput.value = (cur ? cur + " " : "") + token;
+  }
+  lastFocusedInput.focus();
+  recalculate();
+}
+
+function recalculate() {
+  const calc = CALCULATORS[state.activeTab];
+  const vals = {};
+  calc.fields.forEach((f) => {
+    const el = document.getElementById(f.id);
+    vals[f.id] = el ? el.value : f.default;
+  });
+
+  currentCalcResult = calc.compute(vals);
+  document.getElementById("res-headline").textContent = currentCalcResult.headline;
+  document.getElementById("res-subheadline").textContent = currentCalcResult.subheadline;
+
+  const grid = document.getElementById("res-metrics");
+  grid.innerHTML = "";
+  currentCalcResult.metrics.forEach((m) => {
+    const card = document.createElement("div");
+    card.className = "rounded-lg bg-slate-900/90 border border-slate-800 p-3";
+    card.innerHTML = `
+      <div class="text-xs text-slate-400">${m.label}</div>
+      <div class="text-base font-bold text-amber-400 font-mono mt-0.5">${m.value}</div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function addCurrentCalculationToQuote() {
+  if (!currentCalcResult || !currentCalcResult.lineItems) return;
+  currentCalcResult.lineItems.forEach((item) => {
+    state.quote.items.push({
+      id: "it_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6),
+      desc: item.desc,
+      qty: item.qty,
+      unit: item.unit,
+      unitCost: item.unitCost
+    });
+  });
+  renderQuoteItems();
+  const quoteEl = document.getElementById("quote-builder-section");
+  if (quoteEl) quoteEl.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function addBlankLineItem() {
+  state.quote.items.push({
+    id: "it_" + Date.now(),
+    desc: "Custom Material / Labor Item",
+    qty: 1,
+    unit: "job",
+    unitCost: 150.0
+  });
+  renderQuoteItems();
+}
+
+function removeLineItem(id) {
+  state.quote.items = state.quote.items.filter((i) => i.id !== id);
+  renderQuoteItems();
+}
+
+function updateLineItem(id, field, val) {
+  const item = state.quote.items.find((i) => i.id === id);
+  if (!item) return;
+  if (field === "qty" || field === "unitCost") {
+    item[field] = parseFloat(val) || 0;
+  } else {
+    item[field] = val;
+  }
+  renderQuoteTotals();
+}
+
+function computeQuoteTotals() {
+  const rawSubtotal = state.quote.items.reduce((acc, it) => acc + it.qty * it.unitCost, 0);
+  const markupPct = parseFloat(document.getElementById("q-markup")?.value ?? state.quote.markupRate) || 0;
+  const taxPct = parseFloat(document.getElementById("q-tax")?.value ?? state.quote.taxRate) || 0;
+  const depositPct = parseFloat(document.getElementById("q-deposit")?.value ?? state.quote.depositPct) || 0;
+
+  state.quote.markupRate = markupPct;
+  state.quote.taxRate = taxPct;
+  state.quote.depositPct = depositPct;
+
+  const markupAmt = rawSubtotal * (markupPct / 100.0);
+  const subtotalWithMarkup = rawSubtotal + markupAmt;
+  const taxAmt = subtotalWithMarkup * (taxPct / 100.0);
+  const grandTotal = subtotalWithMarkup + taxAmt;
+  const depositDue = grandTotal * (depositPct / 100.0);
+
+  return { rawSubtotal, markupPct, markupAmt, subtotalWithMarkup, taxPct, taxAmt, grandTotal, depositPct, depositDue };
+}
+
+function renderQuoteItems() {
+  const tbody = document.getElementById("quote-items-body");
+  if (!tbody) return;
+  tbody.innerHTML = "";
+
+  if (state.quote.items.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="5" class="text-center py-6 text-slate-400 text-sm">
+          No line items yet. Click <strong>"Add Calculation to Client Quote"</strong> above or add a custom line item.
+        </td>
+      </tr>
+    `;
+  } else {
+    state.quote.items.forEach((item) => {
+      const tr = document.createElement("tr");
+      tr.className = "border-b border-slate-800";
+      const lineTotal = (item.qty * item.unitCost).toFixed(2);
+      tr.innerHTML = `
+        <td class="py-2 pr-2">
+          <input type="text" value="${item.desc.replace(/"/g, "&quot;")}"
+            oninput="updateLineItem('${item.id}','desc',this.value)"
+            class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-white" />
+        </td>
+        <td class="py-2 px-1 w-20">
+          <input type="number" step="0.01" value="${item.qty}"
+            oninput="updateLineItem('${item.id}','qty',this.value)"
+            class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-white font-mono text-right" />
+        </td>
+        <td class="py-2 px-1 w-20">
+          <input type="text" value="${item.unit}"
+            oninput="updateLineItem('${item.id}','unit',this.value)"
+            class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-slate-300 text-center" />
+        </td>
+        <td class="py-2 px-1 w-24">
+          <input type="number" step="0.01" value="${item.unitCost}"
+            oninput="updateLineItem('${item.id}','unitCost',this.value)"
+            class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-white font-mono text-right" />
+        </td>
+        <td class="py-2 pl-2 text-right font-mono text-xs text-amber-400 w-28">
+          $${lineTotal}
+          <button onclick="removeLineItem('${item.id}')" class="ml-2 text-rose-400 hover:text-rose-300 font-bold" title="Remove">×</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+  renderQuoteTotals();
+}
+
+function renderQuoteTotals() {
+  const t = computeQuoteTotals();
+  document.getElementById("tot-raw").textContent = `$${t.rawSubtotal.toFixed(2)}`;
+  document.getElementById("tot-markup").textContent = `$${t.markupAmt.toFixed(2)}`;
+  document.getElementById("tot-tax").textContent = `$${t.taxAmt.toFixed(2)}`;
+  document.getElementById("tot-grand").textContent = `$${t.grandTotal.toFixed(2)}`;
+  document.getElementById("tot-deposit").textContent = `$${t.depositDue.toFixed(2)}`;
+}
+
+// ============================================================================
+// Freemium Paywall & Zero-Backend License Verification
+// ============================================================================
+
+function updateProUI() {
+  const badge = document.getElementById("pro-status-badge");
+  const companyLock = document.getElementById("company-pro-lock");
+  if (state.isPro) {
+    badge.textContent = "PRO UNLOCKED ✓";
+    badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40";
+    if (companyLock) companyLock.classList.add("hidden");
+  } else {
+    badge.textContent = "FREE EDITION (Watermark On)";
+    badge.className = "px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/40 cursor-pointer";
+    if (companyLock) companyLock.classList.remove("hidden");
+  }
+  renderSavedQuotesList();
+}
+
+function openPaywallModal() {
+  document.getElementById("paywall-modal").classList.remove("hidden");
+}
+
+function closePaywallModal() {
+  document.getElementById("paywall-modal").classList.add("hidden");
+}
+
+async function verifyLicenseKey() {
+  const input = document.getElementById("license-key-input");
+  const msg = document.getElementById("license-msg");
+  const key = (input?.value || "").trim();
+
+  if (!key) {
+    msg.textContent = "Please enter your license key.";
+    msg.className = "text-xs text-rose-400 mt-2";
+    return;
+  }
+
+  // 1. Check Instant Demo / VIP Offline Pattern (BC-PRO-XXXX-XXXX)
+  if (CONFIG.DEMO_KEYS.includes(key.toUpperCase()) || /^BC-PRO-[A-Z0-9]{4}-[A-Z0-9]{4}$/i.test(key)) {
+    state.isPro = true;
+    state.licenseKey = key.toUpperCase();
+    saveState();
+    updateProUI();
+    msg.textContent = "Pro License Activated! Custom Branding, Unlimited CRM & Watermark-Free PDFs Unlocked.";
+    msg.className = "text-xs text-emerald-400 mt-2 font-semibold";
+    setTimeout(closePaywallModal, 1100);
+    return;
+  }
+
+  // 2. Verify live against Gumroad's public 0-backend License API
+  msg.textContent = "Verifying license key...";
+  msg.className = "text-xs text-amber-300 mt-2";
+  try {
+    const resp = await fetch("https://api.gumroad.com/v2/licenses/verify", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        product_permalink: CONFIG.GUMROAD_PRODUCT_PERMALINK,
+        license_key: key,
+        increment_uses_count: "true"
+      })
+    });
+    const data = await resp.json();
+    if (data && data.success && !data.purchase?.refunded && !data.purchase?.chargebacked) {
+      state.isPro = true;
+      state.licenseKey = key;
+      saveState();
+      updateProUI();
+      msg.textContent = "Pro License Verified! All features unlocked.";
+      msg.className = "text-xs text-emerald-400 mt-2 font-semibold";
+      setTimeout(closePaywallModal, 1100);
+      return;
+    }
+  } catch (e) {}
+
+  msg.textContent = "Invalid license key. Tip: Use DEMO-PRO-2026 to test Pro mode right now.";
+  msg.className = "text-xs text-rose-400 mt-2";
+}
+
+function handleLogoUpload(event) {
+  if (!state.isPro) {
+    openPaywallModal();
+    event.target.value = "";
+    return;
+  }
+  const file = event.target.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    state.company.logoDataUrl = e.target.result;
+    saveState();
+    alert("Company logo saved! It will appear on all generated PDF quotes & invoices.");
+  };
+  reader.readAsDataURL(file);
+}
+
+function saveCurrentQuoteToCRM() {
+  if (!state.isPro && state.savedQuotes.length >= 1) {
+    openPaywallModal();
+    return;
+  }
+  syncQuoteFormFields();
+  const t = computeQuoteTotals();
+  const record = {
+    id: "q_" + Date.now(),
+    savedAt: new Date().toISOString().slice(0, 10),
+    number: state.quote.number,
+    clientName: state.quote.clientName || "Unnamed Client",
+    jobAddress: state.quote.jobAddress || "",
+    grandTotal: t.grandTotal,
+    quoteSnapshot: JSON.parse(JSON.stringify(state.quote))
+  };
+  state.savedQuotes.unshift(record);
+  saveState();
+  renderSavedQuotesList();
+}
+
+function loadSavedQuote(id) {
+  const rec = state.savedQuotes.find((q) => q.id === id);
+  if (!rec) return;
+  state.quote = JSON.parse(JSON.stringify(rec.quoteSnapshot));
+  document.getElementById("q-client-name").value = state.quote.clientName || "";
+  document.getElementById("q-client-phone").value = state.quote.clientPhone || "";
+  document.getElementById("q-job-address").value = state.quote.jobAddress || "";
+  document.getElementById("q-number").value = state.quote.number || "";
+  renderQuoteItems();
+}
+
+function renderSavedQuotesList() {
+  const el = document.getElementById("saved-quotes-list");
+  if (!el) return;
+  if (state.savedQuotes.length === 0) {
+    el.innerHTML = `<div class="text-xs text-slate-500">No saved jobs yet.</div>`;
+    return;
+  }
+  el.innerHTML = state.savedQuotes
+    .map(
+      (q) => `
+      <div class="flex items-center justify-between bg-slate-900 border border-slate-800 rounded px-3 py-2 text-xs">
+        <div>
+          <span class="font-bold text-amber-400 font-mono">${q.number}</span>
+          <span class="text-white ml-2">${q.clientName}</span>
+          <span class="text-slate-500 ml-2">(${q.savedAt})</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="font-mono font-bold text-emerald-400">$${Number(q.grandTotal).toFixed(2)}</span>
+          <button onclick="loadSavedQuote('${q.id}')" class="text-amber-300 hover:underline font-semibold">Load</button>
+        </div>
+      </div>`
+    )
+    .join("");
+}
+
+function syncQuoteFormFields() {
+  state.quote.docType = document.getElementById("q-doctype")?.value || "ESTIMATE";
+  state.quote.number = document.getElementById("q-number")?.value || state.quote.number;
+  state.quote.clientName = document.getElementById("q-client-name")?.value || "";
+  state.quote.clientPhone = document.getElementById("q-client-phone")?.value || "";
+  state.quote.jobAddress = document.getElementById("q-job-address")?.value || "";
+  state.quote.notes = document.getElementById("q-notes")?.value || "";
+
+  state.company.name = document.getElementById("c-company-name")?.value || "";
+  state.company.phone = document.getElementById("c-company-phone")?.value || "";
+  state.company.licenseNum = document.getElementById("c-company-lic")?.value || "";
+  saveState();
+}
+
+function generatePrintablePDFWindow() {
+  syncQuoteFormFields();
+  if (state.quote.items.length === 0) {
+    addCurrentCalculationToQuote();
+  }
+  const t = computeQuoteTotals();
+  const isPro = state.isPro;
+
+  const companyTitle = isPro && state.company.name ? state.company.name : "Contractor Estimate & Proposal";
+  const companySub =
+    isPro && (state.company.phone || state.company.licenseNum)
+      ? `${state.company.phone ? "Tel: " + state.company.phone : ""} ${state.company.licenseNum ? " | Lic #: " + state.company.licenseNum : ""}`
+      : "Prepared with BuildCalc Estimator";
+
+  const logoHtml =
+    isPro && state.company.logoDataUrl
+      ? `<img src="${state.company.logoDataUrl}" style="max-height:64px;max-width:180px;object-fit:contain;margin-bottom:8px;" />`
+      : "";
+
+  const watermarkBanner = !isPro
+    ? `<div style="background:#fef3c7;border:1px solid #f59e0b;color:#92400e;padding:10px 14px;border-radius:6px;font-size:12px;margin-bottom:18px;text-align:center;">
+         <strong>FREE EDITION WATERMARK:</strong> Generated with BuildCalc Free Edition. Upgrade to BuildCalc Pro ($49 Lifetime) to remove this banner and add your own Company Logo & License #.
+       </div>`
+    : "";
+
+  const watermarkDiagonal = !isPro
+    ? `<div style="position:fixed;top:45%;left:12%;transform:rotate(-28deg);font-size:54px;font-weight:900;color:rgba(15,23,42,0.06);pointer-events:none;z-index:0;white-space:nowrap;">
+         BUILDCALC FREE PREVIEW
+       </div>`
+    : "";
+
+  const rowsHtml = state.quote.items
+    .map(
+      (it, idx) => `
+      <tr>
+        <td style="padding:10px 8px;border-bottom:1px solid #e2e8f0;font-size:13px;">${idx + 1}. ${it.desc}</td>
+        <td style="padding:10px 8px;border-bottom:1px solid #e2e8f0;text-align:right;font-family:monospace;font-size:13px;">${it.qty}</td>
+        <td style="padding:10px 8px;border-bottom:1px solid #e2e8f0;text-align:center;font-size:13px;">${it.unit}</td>
+        <td style="padding:10px 8px;border-bottom:1px solid #e2e8f0;text-align:right;font-family:monospace;font-size:13px;">$${ (it.unitCost * (1 + t.markupPct / 100)).toFixed(2) }</td>
+        <td style="padding:10px 8px;border-bottom:1px solid #e2e8f0;text-align:right;font-family:monospace;font-weight:700;font-size:13px;">$${ (it.qty * it.unitCost * (1 + t.markupPct / 100)).toFixed(2) }</td>
+      </tr>`
+    )
+    .join("");
+
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>${state.quote.docType} ${state.quote.number} - ${state.quote.clientName || "Client"}</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #0f172a; margin: 36px; }
+    @media print {
+      .no-print { display: none !important; }
+      body { margin: 18px; }
+    }
+  </style>
+</head>
+<body>
+  ${watermarkDiagonal}
+  <div class="no-print" style="display:flex;justify-content:space-between;align-items:center;background:#0f172a;color:#fff;padding:12px 18px;border-radius:8px;margin-bottom:24px;">
+    <div style="font-size:14px;"><strong>Print / Save as PDF Ready:</strong> Choose <em>"Save as PDF"</em> in your printer destination.</div>
+    <button onclick="window.print()" style="background:#f59e0b;color:#0f172a;border:none;padding:8px 16px;border-radius:6px;font-weight:700;cursor:pointer;">Print / Save PDF Now</button>
+  </div>
+  ${watermarkBanner}
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #0f172a;padding-bottom:16px;margin-bottom:20px;">
+    <div>
+      ${logoHtml}
+      <h1 style="margin:0;font-size:24px;">${companyTitle}</h1>
+      <div style="font-size:13px;color:#475569;margin-top:4px;">${companySub}</div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-size:22px;font-weight:800;color:#0f172a;letter-spacing:1px;">${state.quote.docType}</div>
+      <div style="font-size:13px;color:#475569;margin-top:4px;"><strong>No:</strong> ${state.quote.number}</div>
+      <div style="font-size:13px;color:#475569;"><strong>Date:</strong> ${state.quote.date}</div>
+    </div>
+  </div>
+
+  <div style="background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;padding:14px 18px;margin-bottom:22px;">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#64748b;">Prepared For Customer / Job Site</div>
+    <div style="font-size:16px;font-weight:700;margin-top:4px;">${state.quote.clientName || "Valued Customer"}</div>
+    <div style="font-size:13px;color:#334155;margin-top:2px;">
+      ${state.quote.jobAddress ? "Job Site: " + state.quote.jobAddress : ""}
+      ${state.quote.clientPhone ? " | Phone: " + state.quote.clientPhone : ""}
+    </div>
+  </div>
+
+  <table style="width:100%;border-collapse:collapse;margin-bottom:24px;">
+    <thead>
+      <tr style="background:#0f172a;color:#fff;font-size:12px;text-transform:uppercase;">
+        <th style="padding:10px 8px;text-align:left;">Description of Work / Materials</th>
+        <th style="padding:10px 8px;text-align:right;">Qty</th>
+        <th style="padding:10px 8px;text-align:center;">Unit</th>
+        <th style="padding:10px 8px;text-align:right;">Unit Rate</th>
+        <th style="padding:10px 8px;text-align:right;">Line Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${rowsHtml}
+    </tbody>
+  </table>
+
+  <div style="display:flex;justify-content:space-between;gap:32px;align-items:flex-start;">
+    <div style="flex:1;">
+      <div style="font-size:12px;font-weight:700;text-transform:uppercase;color:#475569;margin-bottom:6px;">Terms, Scope & Warranty Notes</div>
+      <div style="font-size:12px;color:#334155;line-height:1.5;border:1px solid #cbd5e1;border-radius:6px;padding:10px;">
+        ${state.quote.notes}
+      </div>
+
+      <div style="margin-top:32px;display:flex;gap:24px;">
+        <div style="flex:1;border-top:1px solid #334155;padding-top:6px;font-size:12px;color:#475569;">
+          Customer Acceptance Signature
+        </div>
+        <div style="width:140px;border-top:1px solid #334155;padding-top:6px;font-size:12px;color:#475569;">
+          Date Signed
+        </div>
+      </div>
+    </div>
+
+    <div style="width:270px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;padding:14px;">
+      <div style="display:flex;justify-content:space-between;font-size:13px;padding:4px 0;">
+        <span>Subtotal:</span>
+        <span style="font-family:monospace;font-weight:600;">$${t.subtotalWithMarkup.toFixed(2)}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;padding:4px 0;">
+        <span>Tax (${t.taxPct}%):</span>
+        <span style="font-family:monospace;font-weight:600;">$${t.taxAmt.toFixed(2)}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:17px;font-weight:800;border-top:2px solid #0f172a;margin-top:8px;padding-top:8px;">
+        <span>Grand Total:</span>
+        <span style="font-family:monospace;">$${t.grandTotal.toFixed(2)}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;color:#047857;font-weight:700;margin-top:6px;">
+        <span>Deposit Due (${t.depositPct}%):</span>
+        <span style="font-family:monospace;">$${t.depositDue.toFixed(2)}</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`;
+
+  const w = window.open("", "_blank");
+  if (w) {
+    w.document.open();
+    w.document.write(html);
+    w.document.close();
+  }
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  loadState();
+  selectTab(window.DEFAULT_TAB || "concrete");
+  renderQuoteItems();
+  updateProUI();
+});

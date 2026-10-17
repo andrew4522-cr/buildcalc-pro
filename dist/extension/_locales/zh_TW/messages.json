@@ -1,0 +1,8 @@
+{
+  "appName": {
+    "message": "BuildCalc Pro: 建築工程材料計算機與PDF估價單產生器"
+  },
+  "appDesc": {
+    "message": "支援英尺英寸分數的混凝土、木作骨架、屋頂坡度、石膏板與磁磚計算，60秒生成客戶PDF估價單。"
+  }
+}

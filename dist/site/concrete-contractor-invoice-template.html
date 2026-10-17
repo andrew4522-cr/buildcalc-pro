@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Concrete & Flatwork Estimate + Invoice PDF Generator</title>
+  <meta name="description" content="Create professional concrete driveway, slab, patio, and foundation bids with live yardage math." />
+  <link rel="canonical" href="https://buildcalcpro.github.io/concrete-contractor-invoice-template.html" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta property="og:title" content="Concrete & Flatwork Estimate + Invoice PDF Generator" />
+  <meta property="og:description" content="Create professional concrete driveway, slab, patio, and foundation bids with live yardage math." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://buildcalcpro.github.io/concrete-contractor-invoice-template.html" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Concrete & Flatwork Estimate + Invoice PDF Generator",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web, Android, Windows, macOS, iOS, Chrome OS",
+      "url": "https://buildcalcpro.github.io/concrete-contractor-invoice-template.html",
+      "description": "Create professional concrete driveway, slab, patio, and foundation bids with live yardage math.",
+      "offers": [
+        {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD",
+          "name": "Free Calculator & Watermarked PDF Quote"
+        },
+        {
+          "@type": "Offer",
+          "price": "49.00",
+          "priceCurrency": "USD",
+          "name": "BuildCalc Pro Lifetime License (Custom Logo & Unlimited CRM)"
+        }
+      ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "ratingCount": "318"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do I enter feet, inches, and fractions in Concrete & Flatwork Estimate + Invoice PDF Generator?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Type dimensions naturally such as 14' 6-3/8\" or use the quick fraction buttons (1/8\", 1/4\", 3/8\", 1/2\", 5/8\", 3/4\") directly above the calculator fields."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I turn my material takeoff directly into a client PDF quote or invoice?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Click 'Add Calculation to Client Quote' to populate material and labor line items, add your markup and tax rate, and export a print-ready PDF with a customer signature block."
+          }
+        }
+      ]
+    }
+  ]
+}</script>
+  <script>window.DEFAULT_TAB = "concrete";</script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen antialiased selection:bg-amber-400 selection:text-slate-950">
+
+  <!-- Top Navigation Bar -->
+  <header class="border-b border-slate-800 bg-slate-900/90 sticky top-0 z-30 backdrop-blur">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-lg bg-amber-500 text-slate-950 font-black flex items-center justify-center text-lg shadow">
+          BC
+        </div>
+        <div>
+          <a href="./index.html" class="font-extrabold text-base tracking-tight text-white">BuildCalc <span class="text-amber-400">Pro</span></a>
+          <div class="text-[11px] text-slate-400">Feet-Inches Trade Estimator &amp; 60-Second PDF Quote Builder</div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2.5">
+        <span id="pro-status-badge" onclick="openPaywallModal()">FREE EDITION</span>
+        <button onclick="openPaywallModal()" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-amber-500 hover:bg-amber-400 text-slate-950 transition shadow">
+          Unlock Pro (7-Day Free Trial)
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-6">
+    <!-- Hero SEO Banner -->
+    <div class="mb-6">
+      <h1 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight">Concrete & Flatwork Estimate + Invoice PDF Generator</h1>
+      <p class="text-sm text-slate-400 mt-1 max-w-3xl">Create professional concrete driveway, slab, patio, and foundation bids with live yardage math.</p>
+    </div>
+
+    <!-- Trade Selector Tabs -->
+    <div class="flex flex-wrap gap-2 mb-5">
+      <button data-tab-btn="concrete" onclick="selectTab('concrete')">Concrete &amp; Slabs</button>
+      <button data-tab-btn="framing" onclick="selectTab('framing')">Framing &amp; Studs</button>
+      <button data-tab-btn="roofing" onclick="selectTab('roofing')">Roofing &amp; Pitch</button>
+      <button data-tab-btn="drywall" onclick="selectTab('drywall')">Drywall &amp; Mud</button>
+      <button data-tab-btn="stairs" onclick="selectTab('stairs')">Stair Stringers</button>
+      <button data-tab-btn="decking" onclick="selectTab('decking')">Decks &amp; Lumber</button>
+      <button data-tab-btn="paint" onclick="selectTab('paint')">Paint &amp; Primer</button>
+      <button data-tab-btn="tile" onclick="selectTab('tile')">Tile &amp; Flooring</button>
+    </div>
+
+    <!-- Calculator + Live Result Split Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-10">
+      <!-- Left: Inputs + Fraction Pad -->
+      <div class="lg:col-span-7 bg-slate-900/70 border border-slate-800 rounded-xl p-5 shadow-lg">
+        <div class="flex items-center justify-between mb-3">
+          <h2 id="calc-title" class="text-lg font-bold text-white">Calculator</h2>
+          <span id="calc-badge" class="text-[11px] font-semibold uppercase px-2.5 py-0.5 rounded bg-slate-800 text-amber-400 border border-slate-700">Trade</span>
+        </div>
+
+        <!-- Tape Measure Quick Fraction Bar -->
+        <div class="mb-4 bg-slate-950 border border-slate-800 rounded-lg p-2.5">
+          <div class="text-[11px] text-slate-400 mb-1.5 flex justify-between">
+            <span><strong>Quick Tape-Measure Pad:</strong> Tap to insert feet, inches, or fractions into active field</span>
+            <span class="font-mono text-amber-400">Ex: 14' 6-3/8"</span>
+          </div>
+          <div class="flex flex-wrap gap-1.5">
+            <button type="button" onclick="insertFraction("'")" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 rounded text-xs font-mono font-bold text-amber-300">ft (')</button>
+            <button type="button" onclick="insertFraction('"')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 rounded text-xs font-mono font-bold text-amber-300">in (")</button>
+            <button type="button" onclick="insertFraction('1/16')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 rounded text-xs font-mono">1/16</button>
+            <button type="button" onclick="insertFraction('1/8')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 rounded text-xs font-mono">1/8</button>
+            <button type="button" onclick="insertFraction('1/4')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 rounded text-xs font-mono">1/4</button>
+            <button type="button" onclick="insertFraction('3/8')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 rounded text-xs font-mono">3/8</button>
+            <button type="button" onclick="insertFraction('1/2')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 rounded text-xs font-mono">1/2</button>
+            <button type="button" onclick="insertFraction('5/8')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 rounded text-xs font-mono">5/8</button>
+            <button type="button" onclick="insertFraction('3/4')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 rounded text-xs font-mono">3/4</button>
+            <button type="button" onclick="insertFraction('7/8')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 rounded text-xs font-mono">7/8</button>
+          </div>
+        </div>
+
+        <div id="calc-fields" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+      </div>
+
+      <!-- Right: Instant Material Takeoff Results -->
+      <div class="lg:col-span-5 bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-800 rounded-xl p-5 flex flex-col justify-between shadow-lg">
+        <div>
+          <div class="text-xs font-bold uppercase tracking-wider text-amber-400">Instant Material &amp; Labor Takeoff</div>
+          <div id="res-headline" class="text-2xl font-black text-white font-mono mt-1">—</div>
+          <div id="res-subheadline" class="text-xs text-slate-400 mt-1 mb-4">—</div>
+
+          <div id="res-metrics" class="grid grid-cols-2 gap-2.5"></div>
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-slate-800 flex flex-col gap-2.5">
+          <button onclick="addCurrentCalculationToQuote()" class="w-full py-3 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-sm shadow-md transition flex items-center justify-center gap-2">
+            <span>+ Add Calculation to Client Quote / Invoice</span>
+          </button>
+          <button onclick="generatePrintablePDFWindow()" class="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs border border-slate-700 transition">
+            Quick Print / Save Current Estimate as PDF
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================== -->
+    <!-- Client Estimate & Invoice PDF Builder                              -->
+    <!-- ================================================================== -->
+    <section id="quote-builder-section" class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl mb-12">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-white">Client Quote &amp; Invoice PDF Builder</h2>
+          <p class="text-xs text-slate-400">Combine multiple trade calculations, adjust your markup &amp; tax, and hand your customer a printed or emailed PDF on the spot.</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button onclick="addBlankLineItem()" class="px-3 py-2 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700">
+            + Custom Line Item
+          </button>
+          <button onclick="saveCurrentQuoteToCRM()" class="px-3 py-2 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700">
+            Save Job to CRM
+          </button>
+          <button onclick="generatePrintablePDFWindow()" class="px-4 py-2 rounded-lg text-xs font-extrabold bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow">
+            Generate Client PDF Quote / Invoice →
+          </button>
+        </div>
+      </div>
+
+      <!-- Company Branding (Pro Gate) & Customer Info -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <!-- Contractor Branding Box -->
+        <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 relative">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-400">Your Contractor Branding (PDF Header)</span>
+            <span id="company-pro-lock" onclick="openPaywallModal()" class="text-[11px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded border border-amber-500/30 cursor-pointer">
+              PRO Feature — Click to Unlock
+            </span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <input id="c-company-name" type="text" placeholder="Your Company Name (Pro)" class="bg-slate-900 border border-slate-800 rounded px-3 py-2 text-xs text-white" />
+            <input id="c-company-phone" type="text" placeholder="Business Phone #" class="bg-slate-900 border border-slate-800 rounded px-3 py-2 text-xs text-white" />
+            <input id="c-company-lic" type="text" placeholder="Contractor License / Insurance #" class="bg-slate-900 border border-slate-800 rounded px-3 py-2 text-xs text-white" />
+            <label class="bg-slate-900 border border-slate-800 rounded px-3 py-2 text-xs text-slate-300 cursor-pointer flex items-center justify-between">
+              <span>Upload Logo (PNG/JPG)</span>
+              <input type="file" accept="image/*" onchange="handleLogoUpload(event)" class="hidden" />
+              <span class="text-amber-400 font-semibold">Browse</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Client & Job Site Details -->
+        <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Customer &amp; Job Site Information</div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <select id="q-doctype" class="bg-slate-900 border border-slate-800 rounded px-3 py-2 text-xs text-white font-semibold">
+              <option value="ESTIMATE">ESTIMATE / PROPOSAL</option>
+              <option value="INVOICE">INVOICE</option>
+              <option value="CHANGE ORDER">CHANGE ORDER</option>
+            </select>
+            <input id="q-number" type="text" value="EST-1042" placeholder="Estimate / Invoice #" class="bg-slate-900 border border-slate-800 rounded px-3 py-2 text-xs text-white font-mono" />
+            <input id="q-client-name" type="text" placeholder="Customer Full Name" class="bg-slate-900 border border-slate-800 rounded px-3 py-2 text-xs text-white" />
+            <input id="q-client-phone" type="text" placeholder="Customer Phone / Email" class="bg-slate-900 border border-slate-800 rounded px-3 py-2 text-xs text-white" />
+            <input id="q-job-address" type="text" placeholder="Job Site Street Address, City" class="sm:col-span-2 bg-slate-900 border border-slate-800 rounded px-3 py-2 text-xs text-white" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Line Items Table -->
+      <div class="overflow-x-auto mb-6">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b border-slate-800 text-[11px] uppercase tracking-wider text-slate-400">
+              <th class="py-2">Description of Material / Labor</th>
+              <th class="py-2 text-right">Qty</th>
+              <th class="py-2 text-center">Unit</th>
+              <th class="py-2 text-right">Base Unit Cost ($)</th>
+              <th class="py-2 text-right">Base Line Total</th>
+            </tr>
+          </thead>
+          <tbody id="quote-items-body"></tbody>
+        </table>
+      </div>
+
+      <!-- Totals, Markup & Notes -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+        <div class="md:col-span-7 space-y-4">
+          <div>
+            <label class="text-xs font-bold uppercase text-slate-400 block mb-1">Proposal Terms, Scope &amp; Payment Schedule</label>
+            <textarea id="q-notes" rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-xs text-slate-200">Price includes standard materials and labor as specified above. Valid for 30 days. 30% deposit required to schedule work.</textarea>
+          </div>
+
+          <div>
+            <div class="text-xs font-bold uppercase text-slate-400 mb-2">Saved Client Jobs (Local Device CRM)</div>
+            <div id="saved-quotes-list" class="space-y-1.5"></div>
+          </div>
+        </div>
+
+        <div class="md:col-span-5 bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-2.5">
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-slate-400">Raw Material + Labor Cost:</span>
+            <span id="tot-raw" class="font-mono font-semibold text-white">$0.00</span>
+          </div>
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-slate-400 flex items-center gap-1.5">
+              Overhead &amp; Profit Markup (%):
+              <input id="q-markup" type="number" value="15" oninput="renderQuoteTotals()" class="w-16 bg-slate-900 border border-slate-700 rounded px-2 py-0.5 text-right font-mono text-white" />
+            </span>
+            <span id="tot-markup" class="font-mono text-amber-400">+$0.00</span>
+          </div>
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-slate-400 flex items-center gap-1.5">
+              Sales Tax (%):
+              <input id="q-tax" type="number" step="0.25" value="7.5" oninput="renderQuoteTotals()" class="w-16 bg-slate-900 border border-slate-700 rounded px-2 py-0.5 text-right font-mono text-white" />
+            </span>
+            <span id="tot-tax" class="font-mono text-slate-300">+$0.00</span>
+          </div>
+          <div class="border-t border-slate-800 pt-2.5 flex justify-between items-center">
+            <span class="text-sm font-extrabold text-white">Client Grand Total:</span>
+            <span id="tot-grand" class="text-xl font-black font-mono text-emerald-400">$0.00</span>
+          </div>
+          <div class="flex justify-between items-center text-xs pt-1">
+            <span class="text-slate-400 flex items-center gap-1.5">
+              Deposit Due on Signing (%):
+              <input id="q-deposit" type="number" value="30" oninput="renderQuoteTotals()" class="w-16 bg-slate-900 border border-slate-700 rounded px-2 py-0.5 text-right font-mono text-white" />
+            </span>
+            <span id="tot-deposit" class="font-mono font-bold text-amber-300">$0.00</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- All 52 Programmatic SEO Trade Links Directory -->
+    <section class="border-t border-slate-800 pt-8 mt-8">
+      <h2 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4">All Trade Calculators &amp; Free Estimate Templates</h2>
+      <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+        <li><a href="./index.html" class="text-xs text-slate-400 hover:text-amber-400 transition">BuildCalc Pro</a></li>
+<li><a href="./concrete-slab-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Concrete Slab & Cubic Yard Calculator</a></li>
+<li><a href="./concrete-footing-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Concrete Footing & Foundation Volume Calculator</a></li>
+<li><a href="./sonotube-concrete-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Sonotube & Cylindrical Concrete Pier Calculator</a></li>
+<li><a href="./concrete-driveway-cost-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Concrete Driveway Cost & Yardage Estimator</a></li>
+<li><a href="./concrete-patio-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Stamped & Brushed Concrete Patio Calculator + Quote Template</a></li>
+<li><a href="./framing-stud-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Wall Framing Stud & Sheathing Calculator</a></li>
+<li><a href="./basement-framing-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Basement Wall Framing & Lumber Estimator</a></li>
+<li><a href="./garage-framing-material-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Garage Framing Material & Lumber List Calculator</a></li>
+<li><a href="./sheathing-plywood-osb-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">4x8 Plywood & OSB Wall/Roof Sheathing Sheet Calculator</a></li>
+<li><a href="./roof-pitch-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Roof Pitch, Multiplier & Rafter Slope Calculator</a></li>
+<li><a href="./roof-shingle-bundle-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Roofing Squares & Shingle Bundle Calculator</a></li>
+<li><a href="./metal-roofing-cost-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Standing Seam & Corrugated Metal Roof Estimator</a></li>
+<li><a href="./flat-roof-membrane-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">TPO, EPDM & Modified Bitumen Flat Roof Material Estimator</a></li>
+<li><a href="./drywall-sheet-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Drywall Sheet, Joint Compound & Tape Calculator</a></li>
+<li><a href="./drywall-finishing-cost-estimator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Drywall Hanging, Taping & Level 4/5 Finishing Cost Calculator</a></li>
+<li><a href="./stair-stringer-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Stair Stringer, Rise & Run Calculator</a></li>
+<li><a href="./deck-stair-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Exterior Deck Stair Stringer & Tread Material Calculator</a></li>
+<li><a href="./deck-material-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Decking Board, Joist & Fastener Calculator</a></li>
+<li><a href="./lumber-board-foot-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Hardwood & Dimensional Lumber Board-Foot Calculator</a></li>
+<li><a href="./composite-deck-cost-estimator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Composite Deck Material & Labor Cost Estimator</a></li>
+<li><a href="./fence-picket-post-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Wood Privacy Fence Post, Rail & Picket Material Calculator</a></li>
+<li><a href="./paint-gallon-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Interior & Exterior Paint + Primer Gallon Calculator</a></li>
+<li><a href="./house-painting-bid-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Commercial & Residential Painting Bid Estimator + PDF Proposal</a></li>
+<li><a href="./epoxy-garage-floor-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Garage Floor Epoxy Coating & Flake Coverage Calculator</a></li>
+<li><a href="./tile-flooring-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Tile, Thinset Mortar, Backer Board & Grout Calculator</a></li>
+<li><a href="./shower-tile-waterproofing-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Bathroom & Walk-In Shower Tile + Waterproofing Estimator</a></li>
+<li><a href="./lvp-hardwood-flooring-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">LVP, Laminate & Hardwood Flooring Box Calculator</a></li>
+<li><a href="./contractor-estimate-template.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Free Contractor Estimate & Bid Generator</a></li>
+<li><a href="./contractor-invoice-generator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Free Contractor Invoice PDF Generator</a></li>
+<li><a href="./roofing-estimate-template.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Free Roofing Estimate & Proposal PDF Generator</a></li>
+<li><a href="./concrete-contractor-invoice-template.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Concrete & Flatwork Estimate + Invoice PDF Generator</a></li>
+<li><a href="./framing-carpentry-bid-template.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Rough & Finish Carpentry Bid Calculator + Estimate Template</a></li>
+<li><a href="./drywall-bid-estimator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Drywall Contractor Bid Calculator & Free PDF Quote Maker</a></li>
+<li><a href="./painting-bid-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Painting Contractor Estimate Template & Gallon Calculator</a></li>
+<li><a href="./tile-flooring-estimate-template.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Tile & Flooring Installer Estimate + Invoice PDF Generator</a></li>
+<li><a href="./deck-builder-estimate-template.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Deck Builder Proposal & Material Takeoff PDF Generator</a></li>
+<li><a href="./handyman-estimate-generator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Free Handyman Estimate & Invoice PDF Maker</a></li>
+<li><a href="./remodeling-estimate-template.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Kitchen, Bath & Basement Remodeling Estimate PDF Builder</a></li>
+<li><a href="./siding-gutter-estimate-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Siding, Soffit, Fascia & Gutter Estimate Calculator</a></li>
+<li><a href="./feet-inches-fraction-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Construction Feet, Inches & Fractions Calculator</a></li>
+<li><a href="./contractor-markup-margin-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Contractor Overhead, Markup & Profit Margin Calculator</a></li>
+<li><a href="./cubic-yards-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Cubic Yards Calculator</a></li>
+<li><a href="./roofing-squares-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Roofing Squares Calculator</a></li>
+<li><a href="./post-hole-concrete-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Fence & Deck Post Hole Concrete Bag Calculator</a></li>
+<li><a href="./block-wall-cinder-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">CMU Concrete Block Wall & Mortar Bag Calculator</a></li>
+<li><a href="./subfloor-plywood-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">3/4" Tongue & Groove Subfloor Sheet + Adhesive Calculator</a></li>
+<li><a href="./baseboard-trim-molding-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Baseboard, Crown Molding & Door Casing Linear Foot Calculator</a></li>
+<li><a href="./paver-patio-base-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Brick Paver Patio, Gravel Base & Polymeric Sand Calculator</a></li>
+<li><a href="./asphalt-paving-tonnage-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Hot-Mix Asphalt Paving Tonnage & Square Yardage Calculator</a></li>
+<li><a href="./insulation-batt-blown-calculator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Fiberglass Batt & Blown-In Attic Insulation Calculator</a></li>
+<li><a href="./commercial-bid-proposal-generator.html" class="text-xs text-slate-400 hover:text-amber-400 transition">Commercial Subcontractor Bid Proposal & Sov PDF Generator</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <!-- Freemium Paywall Modal -->
+  <div id="paywall-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+      <button onclick="closePaywallModal()" class="absolute top-3 right-4 text-slate-400 hover:text-white text-xl font-bold">×</button>
+      <div class="inline-block px-2.5 py-0.5 rounded bg-amber-500/20 text-amber-300 text-xs font-bold mb-2">BUILDCALC PRO LICENSE</div>
+      <h3 class="text-xl font-extrabold text-white">Win More Jobs With Branded, Watermark-Free Quotes</h3>
+      <p class="text-xs text-slate-400 mt-1 mb-4">
+        Skip the $60/month bloated software subscriptions. Unlock BuildCalc Pro across Web, Chrome Sidebar, and Android:
+      </p>
+      <ul class="text-xs text-slate-200 space-y-2 mb-5">
+        <li>✓ <strong>Remove all "BuildCalc Free" watermarks</strong> from client PDFs</li>
+        <li>✓ <strong>Add your Company Logo, License # &amp; Phone</strong> to every quote &amp; invoice</li>
+        <li>✓ <strong>Unlimited Saved Jobs &amp; Client CRM</strong> stored privately on your device</li>
+        <li>✓ <strong>Works 100% Offline</strong> in your truck or on the job site</li>
+      </ul>
+
+      <div class="mb-5">
+        <a href="https://andrewverse7567.gumroad.com/l/BuildCalcPro" target="_blank" rel="noopener"
+           class="block text-center bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-xl p-4 transition shadow-lg">
+          <div class="text-[11px] font-extrabold uppercase tracking-wider">Start 7-Day Free Trial</div>
+          <div class="text-xl font-black mt-0.5">Full Pro Access <span class="text-xs font-semibold">(Then €10/mo or €79/yr)</span></div>
+          <div class="text-[11px] text-slate-900 mt-1 font-medium">Cancel anytime • Zero watermarks • Company logo on all quotes</div>
+        </a>
+      </div>
+
+      <div class="border-t border-slate-800 pt-4">
+        <label class="text-xs font-bold text-slate-300 block mb-1.5">Already have a License Key? (Test now with <code class="text-amber-400">DEMO-PRO-2026</code>)</label>
+        <div class="flex gap-2">
+          <input id="license-key-input" type="text" placeholder="Enter license key (e.g. DEMO-PRO-2026)"
+                 class="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white font-mono" />
+          <button onclick="verifyLicenseKey()" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded-lg">
+            Activate
+          </button>
+        </div>
+        <div id="license-msg"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
