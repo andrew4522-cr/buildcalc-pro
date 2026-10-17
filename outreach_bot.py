@@ -27,7 +27,7 @@ USER_AGENT = (
     "Chrome/131.0.0.0 Safari/537.36"
 )
 
-SITE_BASE_URL = os.environ.get("BUILDCALC_URL", "https://buildcalcpro.github.io")
+SITE_BASE_URL = os.environ.get("BUILDCALC_URL", "https://andrew4522-cr.github.io/buildcalc-pro")
 
 TRADE_LANDING_MAP = {
     "roofer": ("roofing", "roof-shingle-bundle-calculator.html", "roofing squares & shingle bundles"),

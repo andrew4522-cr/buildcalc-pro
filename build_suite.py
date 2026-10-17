@@ -22,7 +22,7 @@ SITE_DIR = DIST_DIR / "site"
 EXT_DIR = DIST_DIR / "extension"
 ANDROID_DIR = DIST_DIR / "android"
 
-SITE_DOMAIN = "https://buildcalcpro.github.io"
+SITE_DOMAIN = "https://andrew4522-cr.github.io/buildcalc-pro"
 
 # ============================================================================
 # 52 Programmatic SEO Pages Definition (High-Intent Calculator + Invoice Keywords)
