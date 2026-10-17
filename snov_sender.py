@@ -566,10 +566,11 @@ def load_available_leads() -> List[dict]:
 
 
 def trigger_replenish(target_add: int = 1000):
-    logger.info(f"Triggering lead replenishment scraper (+{target_add} leads)...")
-    scraper_path = Path(__file__).parent / "fast_contractor_scraper.py"
-    subprocess.Popen([sys.executable, str(scraper_path), "--add", str(target_add), "--workers", "16"], cwd=str(Path(__file__).parent))
-    logger.info("Lead replenishment scraper spawned in background.")
+    logger.info(f"Triggering lead replenishment pipeline (+{target_add} leads)...")
+    harvester_path = Path(__file__).parent / "harvest_and_replenish.py"
+    if harvester_path.exists():
+        subprocess.run([sys.executable, str(harvester_path)], cwd=str(Path(__file__).parent), check=False)
+    logger.info("Lead replenishment pipeline completed.")
 
 
 def main():
