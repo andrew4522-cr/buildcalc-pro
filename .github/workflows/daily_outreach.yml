@@ -6,6 +6,8 @@ on:
     - cron: '47 7 * * *'
     # 11:46 Dublin/London time (10:46 UTC)
     - cron: '46 10 * * *'
+    # Check link-clickers every 2 hours to trigger +3d/+7d follow-ups
+    - cron: '15 */2 * * *'
   workflow_dispatch:
 
 jobs:
@@ -20,9 +22,14 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Run Snov.io Outreach Engine (50 per account, 35s delay)
+      - name: Install Dependencies
+        run: pip install requests
+
+      - name: Run Snov.io Outreach & Click Follow-Up Engine
         env:
           SNOV_CLIENT_ID: ${{ secrets.SNOV_CLIENT_ID || '447bad774a8d068adde2584fe3743b5a' }}
           SNOV_CLIENT_SECRET: ${{ secrets.SNOV_CLIENT_SECRET || '4ffaab2261517d434126514ab3d07bdd' }}
         run: |
           python snov_sender.py --batch-now --count 50
+          python snov_sender.py --check-clicks
+

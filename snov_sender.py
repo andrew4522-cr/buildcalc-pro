@@ -48,6 +48,10 @@ SENDERS = {
     }
 }
 
+# Dedicated Link-Clicker Follow-Up Campaign & List (2 follow-ups: +3d and +7d)
+ENGAGED_CLICKERS_LIST_ID = 41635590
+ENGAGED_CLICKERS_CAMPAIGN_ID = 3197307
+
 # Trade to Tool Page Mapping
 TRADE_PAGES = {
     "roofing": ("roofing", "roof-shingle-bundle-calculator.html", "roofing squares & shingle bundles"),
@@ -227,6 +231,7 @@ class SnovOutreachEngine:
 
         city_clause = f" around {city}" if city else ""
 
+        # Step 1: Cold Outreach Pitch
         subject_1 = "Tired of writing bids at 9 PM?"
         body_html_1 = f"""<p>Hey {{{{company_name}}}} team,</p>
 
@@ -235,7 +240,7 @@ class SnovOutreachEngine:
 <p>It eats up your nights and loses you jobs to guys who quote right there in the client's driveway.</p>
 
 <p>I built a completely free estimator you can run right from your phone or truck (BuildCalc Pro):<br>
-<strong><a href="{SITE_BASE_URL}/contractor-estimate-template.html?utm_source=outreach&utm_medium=email">{SITE_BASE_URL}/contractor-estimate-template.html</a></strong></p>
+<strong><a href="{SITE_BASE_URL}/contractor-estimate-template.html?utm_source=outreach&amp;utm_medium=email">{SITE_BASE_URL}/contractor-estimate-template.html</a></strong></p>
 
 <p>What it does in 60 seconds:
 <ul>
@@ -248,7 +253,7 @@ class SnovOutreachEngine:
 <p>No $60/month subscriptions (Jobber/QuickBooks). No 40-minute onboarding calls. No login or credit card required.</p>
 
 <p>You can use it 100% free on your next bid right here:<br>
-<strong><a href="{SITE_BASE_URL}/contractor-estimate-template.html?utm_source=outreach&utm_medium=email">Open BuildCalc Pro Free &rarr;</a></strong></p>
+<strong><a href="{SITE_BASE_URL}/contractor-estimate-template.html?utm_source=outreach&amp;utm_medium=email">Open BuildCalc Pro Free &rarr;</a></strong></p>
 
 <p>If it saves you a couple of hours this week, that's awesome. If not, you still got a free estimate out of it.</p>
 
@@ -258,26 +263,62 @@ BuildCalc Pro Team<br>
 <a href="mailto:{sender_email}">{sender_email}</a></p>
 """
 
-        subject_2 = "Quick question about your bids"
-        body_html_2 = f"""<p>Hey {{{{company_name}}}} team,</p>
+        # Click Follow-Up 1: Triggered 3 days after clicking the link
+        subject_click_fu1 = "{{company_name}} bid format (+ quick question)"
+        body_html_click_fu1 = f"""<p>Hey {{{{company_name}}}} team,</p>
 
-<p>Did you get a chance to test BuildCalc on your last bid?</p>
+<p>Saw you checked out BuildCalc Pro earlier this week.</p>
 
-<p>Takes 60 seconds from your phone, zero setup, no login or credit card needed:<br>
-<strong><a href="{SITE_BASE_URL}/contractor-estimate-template.html?utm_source=outreach&utm_medium=email">{SITE_BASE_URL}/contractor-estimate-template.html</a></strong></p>
+<p>Did you get a chance to run a real estimate with it, or did you get pulled into a job site?</p>
 
-<p>Hope it helped you win the job.</p>
+<p>The biggest friction contractors tell me about is getting their custom logo, standard terms, and material markup loaded in.</p>
+
+<p>If you'd like, reply with your logo and what trades you estimate most (roofing, framing, concrete, drywall, tile, or paint), and I'll personally set up your custom branded template so it's 1-click ready on your phone whenever you're in a client's driveway.</p>
+
+<p>Zero cost, no catch &mdash; takes me 5 minutes.</p>
+
+<p>Or if you just want to run an estimate yourself right now:<br>
+<strong><a href="{SITE_BASE_URL}/contractor-estimate-template.html?utm_source=outreach&amp;utm_medium=email&amp;utm_campaign=click_fu1">Open BuildCalc Pro Free &rarr;</a></strong></p>
+
+<p>Best regards,<br>
+<strong>{sender_name}</strong><br>
+BuildCalc Pro Team<br>
+<a href="mailto:{sender_email}">{sender_email}</a></p>
+"""
+
+        # Click Follow-Up 2: Triggered 7 days after clicking the link (4 days after Follow-Up 1)
+        subject_click_fu2 = "Closing out your file (or should I leave it open?)"
+        body_html_click_fu2 = f"""<p>Hey {{{{company_name}}}} team,</p>
+
+<p>Usually when someone checks out BuildCalc Pro and doesn't reach back out, it means one of two things:
+<ol>
+  <li>You're already 100% satisfied with your current bidding setup (whether that's Jobber, pen-and-paper, or Excel at night).</li>
+  <li>You liked the 60-second PDF quotes, but you're swamped running crews and haven't had 2 minutes of peace.</li>
+</ol>
+</p>
+
+<p>If it's #1, no worries at all &mdash; I'll close out your file and won't bug you again.</p>
+
+<p>If it's #2, the full offline suite with lifetime updates and unlimited PDF exports is right here:<br>
+<strong><a href="{GUMROAD_PRODUCT_URL}">Get BuildCalc Pro Lifetime Access &rarr;</a></strong></p>
+
+<p>No monthly software fees, no price hikes, and a 100% money-back guarantee if it doesn't save you at least 3 hours on your next 5 bids.</p>
+
+<p>Either way, hope business is treating you well this month.</p>
 
 <p>Best,<br>
 <strong>{sender_name}</strong><br>
+BuildCalc Pro Team<br>
 <a href="mailto:{sender_email}">{sender_email}</a></p>
 """
 
         return {
             "subject_1": subject_1,
             "body_html_1": body_html_1,
-            "subject_2": subject_2,
-            "body_html_2": body_html_2,
+            "subject_click_fu1": subject_click_fu1,
+            "body_html_click_fu1": body_html_click_fu1,
+            "subject_click_fu2": subject_click_fu2,
+            "body_html_click_fu2": body_html_click_fu2,
             "tool_url": f"{SITE_BASE_URL}/contractor-estimate-template.html"
         }
 
@@ -304,13 +345,17 @@ BuildCalc Pro Team<br>
             time.sleep(0.3)
         logger.info(f"Enrolled {enrolled}/{len(leads)} verified contractors into list {list_id}")
 
-        # 3. Build Hormozi 2-step Sequence
+        # 3. Build Hormozi Sequence with Native Click Trigger (Delay 3d -> FU1 -> Delay 4d -> FU2)
         t0 = int(time.time() * 1000)
         s1_ref = str(t0)
         c1_id = int(s1_ref + "0")
-        d1_ref = str(t0 + 1)
-        s2_ref = str(t0 + 2)
-        c2_id = int(s2_ref + "0")
+        trig_ref = str(t0 + 1)
+        d1_ref = str(t0 + 2)
+        f1_ref = str(t0 + 3)
+        cf1_id = int(f1_ref + "0")
+        d2_ref = str(t0 + 4)
+        f2_ref = str(t0 + 5)
+        cf2_id = int(f2_ref + "0")
 
         copy_data = self.build_hormozi_copy({}, sender_name, sender_email)
 
@@ -337,20 +382,42 @@ BuildCalc Pro Team<br>
                         "type": "email",
                         "content_slots": 1,
                         "content": [{"id": c1_id, "plain_text": False, "usage": "active"}],
-                        "next": d1_ref
+                        "next": trig_ref
+                    },
+                    {
+                        "_ref": trig_ref,
+                        "type": "trigger",
+                        "action": "click",
+                        "waiting_type": "days",
+                        "waiting_val": 14,
+                        "yes": d1_ref
                     },
                     {
                         "_ref": d1_ref,
                         "type": "delay",
                         "waiting_type": "days",
                         "waiting_val": 3,
-                        "next": s2_ref
+                        "next": f1_ref
                     },
                     {
-                        "_ref": s2_ref,
+                        "_ref": f1_ref,
                         "type": "email",
                         "content_slots": 1,
-                        "content": [{"id": c2_id, "plain_text": False, "usage": "active"}]
+                        "content": [{"id": cf1_id, "plain_text": False, "usage": "active"}],
+                        "next": d2_ref
+                    },
+                    {
+                        "_ref": d2_ref,
+                        "type": "delay",
+                        "waiting_type": "days",
+                        "waiting_val": 4,
+                        "next": f2_ref
+                    },
+                    {
+                        "_ref": f2_ref,
+                        "type": "email",
+                        "content_slots": 1,
+                        "content": [{"id": cf2_id, "plain_text": False, "usage": "active"}]
                     }
                 ]
             }
@@ -364,7 +431,7 @@ BuildCalc Pro Team<br>
             return None
         logger.info(f"Campaign shell created: ID {camp_id}")
 
-        # 5. Inject Step 1 (Initial Pitch) & Step 2 (Follow-up) Content
+        # 5. Inject Step 1 (Initial Pitch), Click FU1 (+3d), and Click FU2 (+7d) Content
         self._request("POST", f"/v2/campaigns/{camp_id}/steps/{s1_ref}/content/create", {
             "content_id": c1_id,
             "plain_text": False,
@@ -373,18 +440,80 @@ BuildCalc Pro Team<br>
             "body": copy_data["body_html_1"]
         })
 
-        self._request("POST", f"/v2/campaigns/{camp_id}/steps/{s2_ref}/content/create", {
-            "content_id": c2_id,
+        self._request("POST", f"/v2/campaigns/{camp_id}/steps/{f1_ref}/content/create", {
+            "content_id": cf1_id,
             "plain_text": False,
             "usage": "active",
-            "subject": copy_data["subject_2"],
-            "body": copy_data["body_html_2"]
+            "subject": copy_data["subject_click_fu1"],
+            "body": copy_data["body_html_click_fu1"]
+        })
+
+        self._request("POST", f"/v2/campaigns/{camp_id}/steps/{f2_ref}/content/create", {
+            "content_id": cf2_id,
+            "plain_text": False,
+            "usage": "active",
+            "subject": copy_data["subject_click_fu2"],
+            "body": copy_data["body_html_click_fu2"]
         })
 
         # 6. Start Campaign Live
         start_res = self._request("POST", f"/v2/campaigns/{camp_id}/action", {"action": "start"})
         logger.info(f"LIVE CAMPAIGN LAUNCHED: Campaign {camp_id} for {sender_email}! Status: {start_res}")
         return camp_id
+
+    def check_and_enroll_clickers(self, campaign_ids: List[int] = None) -> List[dict]:
+        """
+        Monitors link clicks across active outreach campaigns.
+        When any recipient clicks the link, auto-enrolls them into the dedicated
+        'BuildCalc-Engaged-Clickers' campaign list (ID 41635590).
+        This guarantees the recipient automatically receives Follow-Up 1 after 3 days
+        and Follow-Up 2 after 7 days (4 days after Follow-Up 1).
+        """
+        if not campaign_ids:
+            campaign_ids = [3197279, 3197280]
+
+        ledger_file = Path(__file__).parent / "dist" / "outreach" / "clicked_leads_ledger.json"
+        ledger_file.parent.mkdir(parents=True, exist_ok=True)
+        ledger = {}
+        if ledger_file.exists():
+            try:
+                with open(ledger_file, "r", encoding="utf-8") as f:
+                    ledger = json.load(f)
+            except Exception as e:
+                logger.warning(f"Error reading click ledger: {e}")
+
+        newly_enrolled = []
+        for cid in campaign_ids:
+            try:
+                clicks = self._request("GET", f"/v1/get-emails-clicked?campaignId={cid}")
+                if not isinstance(clicks, list):
+                    continue
+                for item in clicks:
+                    email = item.get("email")
+                    if not email:
+                        continue
+                    if email not in ledger:
+                        logger.info(f"[NEW LINK CLICK] Prospect {email} clicked in campaign {cid}! Enrolling into click follow-up sequence...")
+                        added = self.add_prospect(ENGAGED_CLICKERS_LIST_ID, {"email": email})
+                        ledger[email] = {
+                            "email": email,
+                            "campaign_id": cid,
+                            "clicked_link": item.get("link"),
+                            "clicked_time": item.get("time") or time.strftime("%Y-%m-%d %H:%M:%S"),
+                            "enrolled_at": time.strftime("%Y-%m-%d %H:%M:%S"),
+                            "enrolled": added
+                        }
+                        if added:
+                            newly_enrolled.append(ledger[email])
+                            logger.info(f"Successfully enrolled clicker {email} into Clickers Follow-Up campaign {ENGAGED_CLICKERS_CAMPAIGN_ID}")
+            except Exception as e:
+                logger.warning(f"Error checking clicks for campaign {cid}: {e}")
+
+        with open(ledger_file, "w", encoding="utf-8") as f:
+            json.dump(ledger, f, indent=2)
+
+        logger.info(f"Click check complete. Total recorded clickers: {len(ledger)}. Newly enrolled this run: {len(newly_enrolled)}")
+        return newly_enrolled
 
 
 def load_leads_queue() -> List[dict]:
@@ -399,10 +528,16 @@ def load_leads_queue() -> List[dict]:
 def main():
     parser = argparse.ArgumentParser(description="BuildCalc Pro Snov.io Outreach Engine")
     parser.add_argument("--batch-now", action="store_true", help="Launch today's 50+50 batch immediately")
+    parser.add_argument("--check-clicks", action="store_true", help="Poll campaigns for link clicks and enroll clickers into follow-up sequence")
     parser.add_argument("--count", type=int, default=50, help="Emails per sender account (default 50)")
     args = parser.parse_args()
 
     engine = SnovOutreachEngine()
+
+    if args.check_clicks:
+        logger.info("Running link-click monitor on active campaigns...")
+        engine.check_and_enroll_clickers()
+        return
 
     # Step 1: Pre-Flight Link Verification
     if not engine.verify_links():
@@ -432,6 +567,10 @@ def main():
         logger.info(f"  - andrew4522@gmail.com: Campaign ID {camp1} ({len(batch_1)} contractors)")
         logger.info(f"  - andrew@bridgingtheaigap.com: Campaign ID {camp2} ({len(batch_2)} contractors)")
 
+        # Run clicker check as well
+        engine.check_and_enroll_clickers()
+
 
 if __name__ == "__main__":
     main()
+

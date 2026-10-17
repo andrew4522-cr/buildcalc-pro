@@ -40,10 +40,21 @@ def run_batch():
     return result.returncode == 0
 
 
+def run_click_check():
+    logger.info("Polling campaigns for link clickers to trigger +3d/+7d follow-ups...")
+    cmd = [PYTHON_EXE, str(SENDER_SCRIPT), "--check-clicks"]
+    result = subprocess.run(cmd, cwd=str(SCRIPT_DIR), capture_output=True, text=True)
+    logger.info(f"Click check stdout:\n{result.stdout}")
+    if result.stderr:
+        logger.warning(f"Click check stderr:\n{result.stderr}")
+    return result.returncode == 0
+
+
 def continuous_loop():
     logger.info("BuildCalc Pro Daily Daemon started.")
-    logger.info("Active schedule windows: 08:47 and 11:46 daily.")
+    logger.info("Active schedule windows: 08:47 and 11:46 daily + periodic click monitor.")
     fired_today = set()
+    last_click_check = 0
 
     while True:
         now = datetime.now()
@@ -56,9 +67,15 @@ def continuous_loop():
                 fired_today.add(slot_key)
                 run_batch()
 
+        # Check for link clickers every 10 minutes
+        if time.time() - last_click_check >= 600:
+            run_click_check()
+            last_click_check = time.time()
+
         # Clean old keys from previous days
         fired_today = {k for k in fired_today if k.startswith(today_date)}
         time.sleep(30)
+
 
 
 if __name__ == "__main__":
