@@ -1,0 +1,702 @@
+{
+  "info@austinarearoofers.com": {
+    "email": "info@austinarearoofers.com",
+    "company_name": "Austin Area Roofers",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@raisetheroofatx.com": {
+    "email": "info@raisetheroofatx.com",
+    "company_name": "Raise The Roof ATX",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@texasroofingaustin.com": {
+    "email": "info@texasroofingaustin.com",
+    "company_name": "Texas Roofing Austin",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@austinroofingandconstruction.com": {
+    "email": "info@austinroofingandconstruction.com",
+    "company_name": "Austin Roofing and Construction",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "office@zilkerroofing.com": {
+    "email": "office@zilkerroofing.com",
+    "company_name": "Zilker Roofing",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@dallasconcreteservices.com": {
+    "email": "info@dallasconcreteservices.com",
+    "company_name": "Dallas Concrete Services",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@collinsconcrete.com": {
+    "email": "info@collinsconcrete.com",
+    "company_name": "Collins Concrete",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@dallascrete.com": {
+    "email": "info@dallascrete.com",
+    "company_name": "Dallas Crete",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@mgremodel.com": {
+    "email": "info@mgremodel.com",
+    "company_name": "M&G Painting LLC",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@jaresidentialcompany.com": {
+    "email": "info@jaresidentialcompany.com",
+    "company_name": "J&A Residential Company",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@woodleycontractinginc.com": {
+    "email": "info@woodleycontractinginc.com",
+    "company_name": "Woodley Contracting, Inc.",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@halogc.com": {
+    "email": "info@halogc.com",
+    "company_name": "Halo Framing Drywall Acoustics",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@national-interiors.com": {
+    "email": "info@national-interiors.com",
+    "company_name": "National Interiors",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "pascual@gooddayenterprises.com": {
+    "email": "pascual@gooddayenterprises.com",
+    "company_name": "Good Day Enterprises",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@performanceroofingusa.com": {
+    "email": "info@performanceroofingusa.com",
+    "company_name": "Performance Roofing, LLC",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "contact@orlandoconcreteprosinc.com": {
+    "email": "contact@orlandoconcreteprosinc.com",
+    "company_name": "Orlando Concrete Pros Inc.",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "office@orlandopaintingco.com": {
+    "email": "office@orlandopaintingco.com",
+    "company_name": "Orlando Painting Company",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@manorbuilder.com": {
+    "email": "info@manorbuilder.com",
+    "company_name": "Manor Builder",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@tampacontractorgroup.com": {
+    "email": "info@tampacontractorgroup.com",
+    "company_name": "Tampa Contractor Group",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@miamirooftech.com": {
+    "email": "info@miamirooftech.com",
+    "company_name": "Miami Roof-Tech",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@roofer.pro": {
+    "email": "info@roofer.pro",
+    "company_name": "Roofer Pro",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "jose@trejosroofing.com": {
+    "email": "jose@trejosroofing.com",
+    "company_name": "Trejos Roofing LLC",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@paintingenterprisesusa.com": {
+    "email": "info@paintingenterprisesusa.com",
+    "company_name": "Painting Enterprises U.S.A., Inc.",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@paint-techs.com": {
+    "email": "info@paint-techs.com",
+    "company_name": "Paint-Techs LLC",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "contact@paintingcraftsmen.com": {
+    "email": "contact@paintingcraftsmen.com",
+    "company_name": "The Painting Craftsmen",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "bdavis@certapro.com": {
+    "email": "bdavis@certapro.com",
+    "company_name": "CertaPro Painters of Jacksonville",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@concretecommandos.com": {
+    "email": "info@concretecommandos.com",
+    "company_name": "Concrete Commandos Jax",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@canyonplastering.com": {
+    "email": "info@canyonplastering.com",
+    "company_name": "Canyon Plastering & Drywall",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@adobedrywall.com": {
+    "email": "info@adobedrywall.com",
+    "company_name": "Adobe Drywall LLC",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@wddrywall.com": {
+    "email": "info@wddrywall.com",
+    "company_name": "WD Drywall LLC",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@303roofer.com": {
+    "email": "info@303roofer.com",
+    "company_name": "303 Roofer",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@metrocityroofing.com": {
+    "email": "info@metrocityroofing.com",
+    "company_name": "Metro City Roofing",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "service@mydenverroofers.com": {
+    "email": "service@mydenverroofers.com",
+    "company_name": "Denver Roofers LLC",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "bids@denverroofingco.com": {
+    "email": "bids@denverroofingco.com",
+    "company_name": "Denver Roofing Co.",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@denverroofpros.com": {
+    "email": "info@denverroofpros.com",
+    "company_name": "Denver Roof Pros",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@ispdenver.com": {
+    "email": "info@ispdenver.com",
+    "company_name": "ISP Roofing & Construction",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@coltconcrete.com": {
+    "email": "info@coltconcrete.com",
+    "company_name": "Colt Concrete & Asphalt",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@proficientconcrete.com": {
+    "email": "info@proficientconcrete.com",
+    "company_name": "Proficient Concrete, LLC",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "ladell@rlconcrete.net": {
+    "email": "ladell@rlconcrete.net",
+    "company_name": "RL Concrete LLC",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@wilsonroofing.com": {
+    "email": "info@wilsonroofing.com",
+    "company_name": "Wilson Roofing",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "customerservice@escalanteatx.com": {
+    "email": "customerservice@escalanteatx.com",
+    "company_name": "Escalante ATX Roofing & Exteriors",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@brightsparxelectrical.co.uk": {
+    "email": "info@brightsparxelectrical.co.uk",
+    "company_name": "Bright Sparx Electrical Services",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "metalmasterroofs@aol.com": {
+    "email": "metalmasterroofs@aol.com",
+    "company_name": "Metal Master Roofing and Construction",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "mdgwindows@gmail.com": {
+    "email": "mdgwindows@gmail.com",
+    "company_name": "MDG London",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "service@arizonaroofrescue.com": {
+    "email": "service@arizonaroofrescue.com",
+    "company_name": "Arizona Roof Rescue",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@americanroofingtexas.com": {
+    "email": "info@americanroofingtexas.com",
+    "company_name": "American Roofing",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "office@suncityplumbing.com": {
+    "email": "office@suncityplumbing.com",
+    "company_name": "Sun City Plumbing & Remodeling",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@lonestarfoundation.com": {
+    "email": "info@lonestarfoundation.com",
+    "company_name": "Lone Star Foundation Repair",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@flcoastalroofing.com": {
+    "email": "info@flcoastalroofing.com",
+    "company_name": "Florida Coastal Roofing",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@sunstatepainting.com": {
+    "email": "info@sunstatepainting.com",
+    "company_name": "Sun State Painting & Drywall",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3197279,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@londonroofingcontractorsltd.co.uk": {
+    "email": "info@londonroofingcontractorsltd.co.uk",
+    "company_name": "Greater London Roofing Contractors",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@londonroofingcontractor.co.uk": {
+    "email": "info@londonroofingcontractor.co.uk",
+    "company_name": "London Roofing Contractor Ltd",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "contact@londonroofer.co.uk": {
+    "email": "contact@londonroofer.co.uk",
+    "company_name": "London Roofing",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@londonsroofers.co.uk": {
+    "email": "info@londonsroofers.co.uk",
+    "company_name": "London Roofers",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@londonroofingspecialist.co.uk": {
+    "email": "info@londonroofingspecialist.co.uk",
+    "company_name": "London Roofing Specialist Solutions Ltd",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "contact@canderesolutions.co.uk": {
+    "email": "contact@canderesolutions.co.uk",
+    "company_name": "Candere Solutions Ltd",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@paintinglondon.co.uk": {
+    "email": "info@paintinglondon.co.uk",
+    "company_name": "Painting London",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "enquiries@ukcarpentrycontracts.co.uk": {
+    "email": "enquiries@ukcarpentrycontracts.co.uk",
+    "company_name": "UK Carpentry Contracts Ltd",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@your-carpenters.co.uk": {
+    "email": "info@your-carpenters.co.uk",
+    "company_name": "YourCarpenters London",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@formcarpentry.co.uk": {
+    "email": "info@formcarpentry.co.uk",
+    "company_name": "Form Carpentry London",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@expert-plasterers.co.uk": {
+    "email": "info@expert-plasterers.co.uk",
+    "company_name": "Expert Plasterers",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@dfpbuildingservices.co.uk": {
+    "email": "info@dfpbuildingservices.co.uk",
+    "company_name": "DFP Building Services",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@centralroofing.co.uk": {
+    "email": "info@centralroofing.co.uk",
+    "company_name": "Central Group Roofing",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@lordsroofing.co.uk": {
+    "email": "info@lordsroofing.co.uk",
+    "company_name": "Lords Roofing Contractors",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@manchesterjoineryworkshop.co.uk": {
+    "email": "info@manchesterjoineryworkshop.co.uk",
+    "company_name": "Manchester Joinery Workshop",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@rjoinery.co.uk": {
+    "email": "info@rjoinery.co.uk",
+    "company_name": "R Joinery Services",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@pinnaclebuildersmanchester.co.uk": {
+    "email": "info@pinnaclebuildersmanchester.co.uk",
+    "company_name": "Pinnacle Builders Manchester",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@pentapainter.co.uk": {
+    "email": "info@pentapainter.co.uk",
+    "company_name": "Penta Painter & Decorator",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@manchester-plasterer.co.uk": {
+    "email": "info@manchester-plasterer.co.uk",
+    "company_name": "P. Taylor & Sons Plastering Ltd",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@mcrconcrete.com": {
+    "email": "info@mcrconcrete.com",
+    "company_name": "MCR Concrete Ltd",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@manchestermobilemix.co.uk": {
+    "email": "info@manchestermobilemix.co.uk",
+    "company_name": "Manchester Mobile Mix",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@manchestertilinglimited.co.uk": {
+    "email": "info@manchestertilinglimited.co.uk",
+    "company_name": "Manchester Tiling Ltd",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@skkitchenswardrobes.co.uk": {
+    "email": "info@skkitchenswardrobes.co.uk",
+    "company_name": "SK Kitchens & Wardrobes Birmingham",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@roofersandbuilders.co.uk": {
+    "email": "info@roofersandbuilders.co.uk",
+    "company_name": "C R Building and Roofing",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@birminghamroof.co.uk": {
+    "email": "info@birminghamroof.co.uk",
+    "company_name": "Birmingham Roofing & Cladding",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@birminghamroofcompany.co.uk": {
+    "email": "info@birminghamroofcompany.co.uk",
+    "company_name": "Birmingham Roof Company",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@websterroofcareltd.co.uk": {
+    "email": "info@websterroofcareltd.co.uk",
+    "company_name": "Webster Roof Care Ltd",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@mrrooferbirmingham.co.uk": {
+    "email": "info@mrrooferbirmingham.co.uk",
+    "company_name": "Roofer Birmingham",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@birminghamindustrialroof.co.uk": {
+    "email": "info@birminghamindustrialroof.co.uk",
+    "company_name": "Birmingham Industrial Roofing",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@practical-roofingbirmingham.co.uk": {
+    "email": "info@practical-roofingbirmingham.co.uk",
+    "company_name": "Practical Roofing Birmingham",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@triaim.co.uk": {
+    "email": "info@triaim.co.uk",
+    "company_name": "Triaim LTD",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@stedefords.co.uk": {
+    "email": "info@stedefords.co.uk",
+    "company_name": "John Stedeford & Sons Limited",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@myeleganthome.co.uk": {
+    "email": "info@myeleganthome.co.uk",
+    "company_name": "My Elegant Home",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@njsultimatedecor.co.uk": {
+    "email": "info@njsultimatedecor.co.uk",
+    "company_name": "NJS Ultimate Decor",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@coolwoodcarpentry.ie": {
+    "email": "info@coolwoodcarpentry.ie",
+    "company_name": "Coolwood Carpentry Ltd",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@smartcarpentry.ie": {
+    "email": "info@smartcarpentry.ie",
+    "company_name": "Smart Carpentry Ltd",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@roofingcontractors.ie": {
+    "email": "info@roofingcontractors.ie",
+    "company_name": "A & J Roofing Contractors Dublin",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@roofspecialists.ie": {
+    "email": "info@roofspecialists.ie",
+    "company_name": "Roof Specialists Dublin",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@dublincarpenters.ie": {
+    "email": "info@dublincarpenters.ie",
+    "company_name": "Dublin Carpenters",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@iroofing.ie": {
+    "email": "info@iroofing.ie",
+    "company_name": "International Roofing And Guttering",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@bespokecarpentrydublin.ie": {
+    "email": "info@bespokecarpentrydublin.ie",
+    "company_name": "Bespoke Carpentry Dublin",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@joesuttoncarpentry.ie": {
+    "email": "info@joesuttoncarpentry.ie",
+    "company_name": "Joe Sutton Carpentry",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@southdublincarpenter.ie": {
+    "email": "info@southdublincarpenter.ie",
+    "company_name": "South Dublin Carpentry",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@painterly.ie": {
+    "email": "info@painterly.ie",
+    "company_name": "Painterly",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@paintingindublin.ie": {
+    "email": "info@paintingindublin.ie",
+    "company_name": "Painting in Dublin",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@smartpaving.ie": {
+    "email": "info@smartpaving.ie",
+    "company_name": "Smart Paving",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@premierbuilders.ie": {
+    "email": "info@premierbuilders.ie",
+    "company_name": "Premier Builders",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@hillviewbuildingandjoinery.ie": {
+    "email": "info@hillviewbuildingandjoinery.ie",
+    "company_name": "Hillview Building and Joinery",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@corkroofers.ie": {
+    "email": "info@corkroofers.ie",
+    "company_name": "Cork Roofers",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  },
+  "info@rooferscork.ie": {
+    "email": "info@rooferscork.ie",
+    "company_name": "Roofers Cork",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3197280,
+    "dispatched_at": "2026-10-17 11:29:00"
+  }
+}

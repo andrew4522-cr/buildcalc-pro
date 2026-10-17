@@ -14,6 +14,7 @@ import time
 import json
 import logging
 import argparse
+import subprocess
 import urllib.request
 import urllib.parse
 from pathlib import Path
@@ -525,10 +526,57 @@ def load_leads_queue() -> List[dict]:
         return json.load(f)
 
 
+def load_dispatched_ledger() -> dict:
+    disp_file = Path(__file__).parent / "dist" / "outreach" / "dispatched_leads.json"
+    if disp_file.exists():
+        try:
+            with open(disp_file, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception as e:
+            logger.warning(f"Error loading dispatched leads: {e}")
+    return {}
+
+
+def record_dispatched_leads(leads: List[dict], sender_email: str, camp_id: int):
+    disp_file = Path(__file__).parent / "dist" / "outreach" / "dispatched_leads.json"
+    ledger = load_dispatched_ledger()
+    now_str = time.strftime("%Y-%m-%d %H:%M:%S")
+    for l in leads:
+        em = (l.get("email") or "").lower().strip()
+        if em:
+            ledger[em] = {
+                "email": em,
+                "company_name": l.get("company_name", ""),
+                "sender": sender_email,
+                "campaign_id": camp_id,
+                "dispatched_at": now_str
+            }
+    disp_file.parent.mkdir(parents=True, exist_ok=True)
+    with open(disp_file, "w", encoding="utf-8") as f:
+        json.dump(ledger, f, indent=2)
+    logger.info(f"Recorded {len(leads)} dispatched leads into ledger. Total sent to date: {len(ledger)}")
+
+
+def load_available_leads() -> List[dict]:
+    all_leads = load_leads_queue()
+    dispatched = load_dispatched_ledger()
+    available = [l for l in all_leads if (l.get("email") or "").lower().strip() not in dispatched]
+    logger.info(f"Lead Pipeline Status: {len(all_leads)} total in queue | {len(dispatched)} dispatched | {len(available)} ready to send")
+    return available
+
+
+def trigger_replenish(target_add: int = 1000):
+    logger.info(f"Triggering lead replenishment scraper (+{target_add} leads)...")
+    scraper_path = Path(__file__).parent / "fast_contractor_scraper.py"
+    subprocess.Popen([sys.executable, str(scraper_path), "--add", str(target_add), "--workers", "16"], cwd=str(Path(__file__).parent))
+    logger.info("Lead replenishment scraper spawned in background.")
+
+
 def main():
     parser = argparse.ArgumentParser(description="BuildCalc Pro Snov.io Outreach Engine")
     parser.add_argument("--batch-now", action="store_true", help="Launch today's 50+50 batch immediately")
     parser.add_argument("--check-clicks", action="store_true", help="Poll campaigns for link clicks and enroll clickers into follow-up sequence")
+    parser.add_argument("--replenish", action="store_true", help="Manually trigger lead replenishment scraper (+1000 leads)")
     parser.add_argument("--count", type=int, default=50, help="Emails per sender account (default 50)")
     args = parser.parse_args()
 
@@ -539,6 +587,10 @@ def main():
         engine.check_and_enroll_clickers()
         return
 
+    if args.replenish:
+        trigger_replenish(1000)
+        return
+
     # Step 1: Pre-Flight Link Verification
     if not engine.verify_links():
         sys.exit(1)
@@ -546,22 +598,31 @@ def main():
     # Step 2: Configure 35s Delays
     engine.configure_sender_delays()
 
-    # Step 3: Load Verified Contractor Leads
-    leads = load_leads_queue()
-    logger.info(f"Total leads in queue: {len(leads)}")
+    # Step 3: Load Available (Unsent) Contractor Leads
+    available_leads = load_available_leads()
+
+    # Auto-replenishment threshold check (replenish if remaining falls below 500)
+    if len(available_leads) < 500:
+        logger.warning(f"Available leads ({len(available_leads)}) below replenishment buffer (500). Auto-replenishing now...")
+        trigger_replenish(1000)
 
     if args.batch_now:
         need_total = args.count * 2
-        if len(leads) < need_total:
-            logger.warning(f"Queue currently has {len(leads)} leads; need {need_total}. Will allocate available leads equally.")
+        if len(available_leads) < need_total:
+            logger.warning(f"Available leads ({len(available_leads)}) less than batch requirement ({need_total}). Allocating available.")
 
-        half = len(leads) // 2
-        batch_1 = leads[:args.count] if len(leads) >= args.count * 2 else leads[:half]
-        batch_2 = leads[args.count:args.count * 2] if len(leads) >= args.count * 2 else leads[half:]
+        half = len(available_leads) // 2
+        batch_1 = available_leads[:args.count] if len(available_leads) >= args.count * 2 else available_leads[:half]
+        batch_2 = available_leads[args.count:args.count * 2] if len(available_leads) >= args.count * 2 else available_leads[half:]
 
         today_str = time.strftime("%Y-%m-%d")
         camp1 = engine.launch_campaign_batch("andrew4522@gmail.com", batch_1, f"Batch-1-{today_str}")
+        if camp1:
+            record_dispatched_leads(batch_1, "andrew4522@gmail.com", camp1)
+
         camp2 = engine.launch_campaign_batch("andrew@bridgingtheaigap.com", batch_2, f"Batch-2-{today_str}")
+        if camp2:
+            record_dispatched_leads(batch_2, "andrew@bridgingtheaigap.com", camp2)
 
         logger.info(f"SUCCESS! Launched both campaigns:")
         logger.info(f"  - andrew4522@gmail.com: Campaign ID {camp1} ({len(batch_1)} contractors)")
@@ -573,4 +634,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 

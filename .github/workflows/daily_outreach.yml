@@ -33,3 +33,11 @@ jobs:
           python snov_sender.py --batch-now --count 50
           python snov_sender.py --check-clicks
 
+      - name: Persist Outreach Ledger & Queue State
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add dist/outreach/
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(outreach): update dispatched leads and click ledger [skip ci]" && git push)
+
+

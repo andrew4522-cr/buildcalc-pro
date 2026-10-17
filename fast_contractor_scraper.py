@@ -60,30 +60,49 @@ TRADE_CONFIG = {
 
 CITIES = [
     # US Sunbelt & West
-    ("Austin", "TX"), ("Dallas", "TX"), ("Houston", "TX"), ("San Antonio", "TX"), ("Fort Worth", "TX"),
-    ("Phoenix", "AZ"), ("Tucson", "AZ"), ("Mesa", "AZ"), ("Scottsdale", "AZ"),
-    ("Miami", "FL"), ("Orlando", "FL"), ("Tampa", "FL"), ("Jacksonville", "FL"), ("St. Petersburg", "FL"),
-    ("Denver", "CO"), ("Colorado Springs", "CO"), ("Aurora", "CO"),
-    ("Las Vegas", "NV"), ("Reno", "NV"),
-    ("San Diego", "CA"), ("Los Angeles", "CA"), ("San Jose", "CA"), ("Sacramento", "CA"),
-    ("Seattle", "WA"), ("Spokane", "WA"), ("Tacoma", "WA"),
-    ("Portland", "OR"), ("Salt Lake City", "UT"),
-    # US Midwest & East
-    ("Atlanta", "GA"), ("Savannah", "GA"),
-    ("Charlotte", "NC"), ("Raleigh", "NC"), ("Greensboro", "NC"),
-    ("Nashville", "TN"), ("Memphis", "TN"), ("Knoxville", "TN"),
-    ("Chicago", "IL"), ("Naperville", "IL"),
-    ("Columbus", "OH"), ("Cleveland", "OH"), ("Cincinnati", "OH"),
-    ("Indianapolis", "IN"), ("Detroit", "MI"), ("Grand Rapids", "MI"),
-    ("Philadelphia", "PA"), ("Pittsburgh", "PA"),
-    ("Boston", "MA"), ("Richmond", "VA"), ("Virginia Beach", "VA"),
+    ("Austin", "TX"), ("Dallas", "TX"), ("Houston", "TX"), ("San Antonio", "TX"), ("Fort Worth", "TX"), ("El Paso", "TX"), ("Arlington", "TX"), ("Plano", "TX"),
+    ("Phoenix", "AZ"), ("Tucson", "AZ"), ("Mesa", "AZ"), ("Scottsdale", "AZ"), ("Chandler", "AZ"), ("Gilbert", "AZ"),
+    ("Miami", "FL"), ("Orlando", "FL"), ("Tampa", "FL"), ("Jacksonville", "FL"), ("St. Petersburg", "FL"), ("Fort Lauderdale", "FL"), ("Cape Coral", "FL"), ("Tallahassee", "FL"),
+    ("Denver", "CO"), ("Colorado Springs", "CO"), ("Aurora", "CO"), ("Fort Collins", "CO"), ("Boulder", "CO"),
+    ("Las Vegas", "NV"), ("Reno", "NV"), ("Henderson", "NV"),
+    ("San Diego", "CA"), ("Los Angeles", "CA"), ("San Jose", "CA"), ("Sacramento", "CA"), ("Fresno", "CA"), ("Long Beach", "CA"), ("Oakland", "CA"), ("Bakersfield", "CA"),
+    ("Seattle", "WA"), ("Spokane", "WA"), ("Tacoma", "WA"), ("Vancouver", "WA"), ("Bellevue", "WA"),
+    ("Portland", "OR"), ("Eugene", "OR"), ("Salem", "OR"), ("Bend", "OR"),
+    ("Salt Lake City", "UT"), ("West Valley City", "UT"), ("Provo", "UT"), ("Orem", "UT"),
+    ("Boise", "ID"), ("Meridian", "ID"), ("Nampa", "ID"),
+    ("Albuquerque", "NM"), ("Las Cruces", "NM"), ("Santa Fe", "NM"),
+    # US Midwest & Heartland
+    ("Atlanta", "GA"), ("Augusta", "GA"), ("Columbus", "GA"), ("Savannah", "GA"),
+    ("Charlotte", "NC"), ("Raleigh", "NC"), ("Greensboro", "NC"), ("Durham", "NC"), ("Winston-Salem", "NC"),
+    ("Charleston", "SC"), ("Columbia", "SC"), ("Greenville", "SC"),
+    ("Nashville", "TN"), ("Memphis", "TN"), ("Knoxville", "TN"), ("Chattanooga", "TN"),
+    ("Chicago", "IL"), ("Naperville", "IL"), ("Rockford", "IL"), ("Joliet", "IL"),
+    ("Columbus", "OH"), ("Cleveland", "OH"), ("Cincinnati", "OH"), ("Toledo", "OH"), ("Akron", "OH"),
+    ("Indianapolis", "IN"), ("Fort Wayne", "IN"), ("Evansville", "IN"),
+    ("Detroit", "MI"), ("Grand Rapids", "MI"), ("Warren", "MI"), ("Ann Arbor", "MI"),
+    ("Philadelphia", "PA"), ("Pittsburgh", "PA"), ("Allentown", "PA"),
+    ("Boston", "MA"), ("Worcester", "MA"), ("Springfield", "MA"),
+    ("Richmond", "VA"), ("Virginia Beach", "VA"), ("Norfolk", "VA"), ("Chesapeake", "VA"),
+    ("Kansas City", "MO"), ("St. Louis", "MO"), ("Springfield", "MO"),
+    ("Omaha", "NE"), ("Lincoln", "NE"),
+    ("Des Moines", "IA"), ("Cedar Rapids", "IA"),
+    ("Minneapolis", "MN"), ("St. Paul", "MN"), ("Rochester", "MN"),
+    ("Milwaukee", "WI"), ("Madison", "WI"), ("Green Bay", "WI"),
+    ("Oklahoma City", "OK"), ("Tulsa", "OK"),
+    ("Louisville", "KY"), ("Lexington", "KY"),
+    ("Birmingham", "AL"), ("Huntsville", "AL"), ("Montgomery", "AL"), ("Mobile", "AL"),
     # UK & Ireland
     ("London", "UK"), ("Birmingham", "UK"), ("Manchester", "UK"), ("Leeds", "UK"),
     ("Glasgow", "UK"), ("Sheffield", "UK"), ("Bristol", "UK"), ("Newcastle", "UK"),
-    ("Dublin", "Ireland"), ("Cork", "Ireland"), ("Galway", "Ireland"), ("Limerick", "Ireland"),
-    # Canada & Australia
+    ("Liverpool", "UK"), ("Nottingham", "UK"), ("Leicester", "UK"), ("Southampton", "UK"),
+    ("Edinburgh", "UK"), ("Cardiff", "UK"), ("Belfast", "UK"),
+    ("Dublin", "Ireland"), ("Cork", "Ireland"), ("Galway", "Ireland"), ("Limerick", "Ireland"), ("Waterford", "Ireland"),
+    # Canada & Australia & New Zealand
     ("Toronto", "Canada"), ("Vancouver", "Canada"), ("Calgary", "Canada"), ("Ottawa", "Canada"),
+    ("Edmonton", "Canada"), ("Winnipeg", "Canada"), ("Quebec City", "Canada"), ("Hamilton", "Canada"),
     ("Sydney", "Australia"), ("Melbourne", "Australia"), ("Brisbane", "Australia"), ("Perth", "Australia"),
+    ("Adelaide", "Australia"), ("Gold Coast", "Australia"), ("Canberra", "Australia"), ("Newcastle", "Australia"),
+    ("Auckland", "New Zealand"), ("Wellington", "New Zealand"), ("Christchurch", "New Zealand"),
 ]
 
 
@@ -246,6 +265,17 @@ def clean_existing_leads(json_path: Path, csv_path: Path):
                     seen_domains.add(dom)
                 cleaned.append(l)
 
+        dispatched_path = json_path.parent / "dispatched_leads.json"
+        if dispatched_path.exists():
+            try:
+                with open(dispatched_path, "r", encoding="utf-8") as f:
+                    disp = json.load(f)
+                    for k in disp.keys():
+                        seen_emails.add(k.lower().strip())
+                logger.info(f"Loaded {len(disp)} previously dispatched emails to ensure zero duplicates.")
+            except Exception as e:
+                logger.warning(f"Error reading dispatched ledger: {e}")
+
         with open(json_path, "w", encoding="utf-8") as f:
             json.dump(cleaned, f, indent=2, ensure_ascii=False)
         if cleaned:
@@ -264,7 +294,8 @@ def clean_existing_leads(json_path: Path, csv_path: Path):
 def main():
     import argparse
     parser = argparse.ArgumentParser(description="BuildCalc Fast Contractor Scraper")
-    parser.add_argument("--target", type=int, default=1000, help="Target total verified leads")
+    parser.add_argument("--target", type=int, default=0, help="Target total verified leads")
+    parser.add_argument("--add", type=int, default=1000, help="Number of new leads to add to queue (default 1000)")
     parser.add_argument("--workers", type=int, default=16, help="Worker threads for crawling")
     args = parser.parse_args()
 
@@ -275,20 +306,22 @@ def main():
 
     leads, seen_emails, seen_domains = clean_existing_leads(json_path, csv_path)
 
-    if len(leads) >= args.target:
-        logger.info(f"Queue already has {len(leads)} leads (target: {args.target}). Exiting.")
+    target_count = args.target if args.target > 0 else (len(leads) + args.add)
+
+    if len(leads) >= target_count:
+        logger.info(f"Queue already has {len(leads)} leads (target: {target_count}). Exiting.")
         return
 
-    logger.info(f"Starting scrape: currently {len(leads)} leads, target {args.target}...")
+    logger.info(f"Starting scrape: currently {len(leads)} leads, target {target_count} (+{target_count - len(leads)} new leads)...")
 
     trades = list(TRADE_CONFIG.keys())
 
     for city_name, state_or_country in CITIES:
-        if len(leads) >= args.target:
+        if len(leads) >= target_count:
             break
 
         for trade in trades:
-            if len(leads) >= args.target:
+            if len(leads) >= target_count:
                 break
 
             query = f"{trade} contractor {city_name} {state_or_country} email contact"
@@ -327,7 +360,7 @@ def main():
                                 **copy
                             }
                             leads.append(lead_record)
-                            logger.info(f" [+] Found lead ({len(leads)}/{args.target}): {comp_name} | {em} | {trade} ({city_name})")
+                            logger.info(f" [+] Found lead ({len(leads)}/{target_count}): {comp_name} | {em} | {trade} ({city_name})")
 
                             if len(leads) % 5 == 0:
                                 with open(json_path, "w", encoding="utf-8") as f:
