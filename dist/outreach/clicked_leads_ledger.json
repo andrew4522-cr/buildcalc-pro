@@ -1,1 +1,20 @@
-{}
+{
+  "info@jaresidentialcompany.com": {
+    "email": "info@jaresidentialcompany.com",
+    "company_name": "J&amp;A Residential Company",
+    "campaign_id": 3197279,
+    "clicked_link": null,
+    "clicked_time": "2026-10-17T12:04:03+00:00",
+    "enrolled_at": "2026-10-18 12:12:15",
+    "enrolled": true
+  },
+  "info@diversifiedroofing.com": {
+    "email": "info@diversifiedroofing.com",
+    "company_name": "Diversified Roofing",
+    "campaign_id": 3197280,
+    "clicked_link": null,
+    "clicked_time": "2026-10-18T00:30:23+00:00",
+    "enrolled_at": "2026-10-18 12:12:17",
+    "enrolled": true
+  }
+}

@@ -490,17 +490,24 @@ BuildCalc Pro Team<br>
                 if not isinstance(clicks, list):
                     continue
                 for item in clicks:
-                    email = item.get("email")
+                    email = (item.get("email") or item.get("prospectEmail") or "").strip().lower()
                     if not email:
                         continue
+                    company = item.get("companyName") or item.get("prospectFirstName") or item.get("prospectName") or ""
                     if email not in ledger:
-                        logger.info(f"[NEW LINK CLICK] Prospect {email} clicked in campaign {cid}! Enrolling into click follow-up sequence...")
-                        added = self.add_prospect(ENGAGED_CLICKERS_LIST_ID, {"email": email})
+                        logger.info(f"[NEW LINK CLICK] Prospect {email} ({company}) clicked in campaign {cid}! Enrolling into click follow-up sequence...")
+                        added = self.add_prospect(ENGAGED_CLICKERS_LIST_ID, {
+                            "email": email,
+                            "first_name": company,
+                            "company_name": company,
+                            "trade": "Contractor"
+                        })
                         ledger[email] = {
                             "email": email,
+                            "company_name": company,
                             "campaign_id": cid,
-                            "clicked_link": item.get("link"),
-                            "clicked_time": item.get("time") or time.strftime("%Y-%m-%d %H:%M:%S"),
+                            "clicked_link": item.get("link") or item.get("links") or item.get("sourcePage"),
+                            "clicked_time": item.get("visitedAt") or item.get("time") or time.strftime("%Y-%m-%d %H:%M:%S"),
                             "enrolled_at": time.strftime("%Y-%m-%d %H:%M:%S"),
                             "enrolled": added
                         }
