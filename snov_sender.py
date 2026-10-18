@@ -616,12 +616,12 @@ def main():
         batch_1 = available_leads[:args.count] if len(available_leads) >= args.count * 2 else available_leads[:half]
         batch_2 = available_leads[args.count:args.count * 2] if len(available_leads) >= args.count * 2 else available_leads[half:]
 
-        today_str = time.strftime("%Y-%m-%d")
-        camp1 = engine.launch_campaign_batch("andrew4522@gmail.com", batch_1, f"Batch-1-{today_str}")
+        window_tag = time.strftime("%Y-%m-%d_%H%M")
+        camp1 = engine.launch_campaign_batch("andrew4522@gmail.com", batch_1, f"Batch-1-{window_tag}")
         if camp1:
             record_dispatched_leads(batch_1, "andrew4522@gmail.com", camp1)
 
-        camp2 = engine.launch_campaign_batch("andrew@bridgingtheaigap.com", batch_2, f"Batch-2-{today_str}")
+        camp2 = engine.launch_campaign_batch("andrew@bridgingtheaigap.com", batch_2, f"Batch-2-{window_tag}")
         if camp2:
             record_dispatched_leads(batch_2, "andrew@bridgingtheaigap.com", camp2)
 
