@@ -16,5 +16,14 @@
     "clicked_time": "2026-10-18T00:30:23+00:00",
     "enrolled_at": "2026-10-18 12:12:17",
     "enrolled": true
+  },
+  "info@proficientconcrete.com": {
+    "email": "info@proficientconcrete.com",
+    "company_name": "Proficient Concrete, LLC",
+    "campaign_id": 3197279,
+    "clicked_link": null,
+    "clicked_time": "2026-10-19T14:45:56+00:00",
+    "enrolled_at": "2026-10-19 14:52:57",
+    "enrolled": true
   }
 }
