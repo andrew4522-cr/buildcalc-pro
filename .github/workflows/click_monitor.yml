@@ -29,8 +29,8 @@ jobs:
 
       - name: Poll Link Clicks & Enroll into Follow-Up Sequences
         env:
-          SNOV_CLIENT_ID: ${{ secrets.SNOV_CLIENT_ID || '447bad774a8d068adde2584fe3743b5a' }}
-          SNOV_CLIENT_SECRET: ${{ secrets.SNOV_CLIENT_SECRET || '4ffaab2261517d434126514ab3d07bdd' }}
+          SNOV_CLIENT_ID: ${{ secrets.SNOV_CLIENT_ID }}
+          SNOV_CLIENT_SECRET: ${{ secrets.SNOV_CLIENT_SECRET }}
         run: |
           python snov_sender.py --check-clicks
 
