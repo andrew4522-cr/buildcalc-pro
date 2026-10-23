@@ -8398,5 +8398,705 @@
     "sender": "andrew@bridgingtheaigap.com",
     "campaign_id": 3206172,
     "dispatched_at": "2026-10-23 08:17:44"
+  },
+  "info@perthpremier.com.au": {
+    "email": "info@perthpremier.com.au",
+    "company_name": "Perth Premier Painting Contractors",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@residentialpaintersperth.com.au": {
+    "email": "info@residentialpaintersperth.com.au",
+    "company_name": "Residential Painters Perth",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "admin@propaintingworks.com.au": {
+    "email": "admin@propaintingworks.com.au",
+    "company_name": "Pro Painting Works",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "admin@evolvepaintingandmaintenance.com.au": {
+    "email": "admin@evolvepaintingandmaintenance.com.au",
+    "company_name": "Evolve Painting and Maintenance",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "admin@colourificpainting.com.au": {
+    "email": "admin@colourificpainting.com.au",
+    "company_name": "Colourific Painting Contractors",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "admin@aapainters.com.au": {
+    "email": "admin@aapainters.com.au",
+    "company_name": "A & A Painters",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@chrishoolepainters.com.au": {
+    "email": "info@chrishoolepainters.com.au",
+    "company_name": "Chris Hoole & Staff Painters",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@bppainters.com.au": {
+    "email": "info@bppainters.com.au",
+    "company_name": "Brisbane Professional Painters",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "admin@imanpainting.com.au": {
+    "email": "admin@imanpainting.com.au",
+    "company_name": "I-Man Painting",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@sovralpainting.com.au": {
+    "email": "info@sovralpainting.com.au",
+    "company_name": "Sovral Painting",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@paintit.com.au": {
+    "email": "info@paintit.com.au",
+    "company_name": "PaintIT",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@arturspainting.com.au": {
+    "email": "info@arturspainting.com.au",
+    "company_name": "Artur's Painting",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@soumission-construction.com": {
+    "email": "info@soumission-construction.com",
+    "company_name": "C\u00e9ramique Ext\u00e9rieure",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@carrelagesdemontreal.com": {
+    "email": "info@carrelagesdemontreal.com",
+    "company_name": "Carrelages de Montr\u00e9al Lt\u00e9e",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@constructionbrg.ca": {
+    "email": "info@constructionbrg.ca",
+    "company_name": "info@constructionbrg.ca",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "contact@charpentemontreal.com": {
+    "email": "contact@charpentemontreal.com",
+    "company_name": "contact@charpentemontreal.com / contact@charpentemontreal.ca",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "contact@charpentemontreal.ca": {
+    "email": "contact@charpentemontreal.ca",
+    "company_name": "contact@charpentemontreal.com / contact@charpentemontreal.ca",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@donysh.com": {
+    "email": "info@donysh.com",
+    "company_name": "Donysh Inc",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "association@ttmac.com": {
+    "email": "association@ttmac.com",
+    "company_name": "Terrazzo Tile and Marble Association of Canada - TTMAC",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@kanatacarpentry.ca": {
+    "email": "info@kanatacarpentry.ca",
+    "company_name": "Kanata Carpentry",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@theenglishcarpenter.com": {
+    "email": "info@theenglishcarpenter.com",
+    "company_name": "The English Carpenter",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@mscarpentry.ca": {
+    "email": "info@mscarpentry.ca",
+    "company_name": "MS Carpentry Ltd",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@connectgroup.ca": {
+    "email": "info@connectgroup.ca",
+    "company_name": "Connect Group Construction Inc",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@vancarpentry.com": {
+    "email": "info@vancarpentry.com",
+    "company_name": "Custom Vancouver Carpentry & Contracting",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "asahivancouver@gmail.com": {
+    "email": "asahivancouver@gmail.com",
+    "company_name": "Asahi Carpentry / Construction",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "office.grandvilla@gmail.com": {
+    "email": "office.grandvilla@gmail.com",
+    "company_name": "Grand Villa Construction Ltd",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@vantile.ca": {
+    "email": "info@vantile.ca",
+    "company_name": "Vantile Tiles & Flooring",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@northshoretiling.com": {
+    "email": "info@northshoretiling.com",
+    "company_name": "North Shore Tiling Ltd",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@amiritetile.ca": {
+    "email": "info@amiritetile.ca",
+    "company_name": "Amirite Tile",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@tilenstyle.ca": {
+    "email": "info@tilenstyle.ca",
+    "company_name": "Tile N Style",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@stilesolution.ca": {
+    "email": "info@stilesolution.ca",
+    "company_name": "S'Tile Solution",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "contact@superiortilecontracting.ca": {
+    "email": "contact@superiortilecontracting.ca",
+    "company_name": "Superior Tile Contracting",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@elitile.ca": {
+    "email": "info@elitile.ca",
+    "company_name": "Elitile",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@calgarywoodworks.ca": {
+    "email": "info@calgarywoodworks.ca",
+    "company_name": "Calgary Wood Works",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@brunel.ca": {
+    "email": "info@brunel.ca",
+    "company_name": "Brunel Commercial Interiors & Store Fixtures",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@knurl.ca": {
+    "email": "info@knurl.ca",
+    "company_name": "Knurl",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@lucianocarpentry.com": {
+    "email": "info@lucianocarpentry.com",
+    "company_name": "Luciano Carpentry",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "hello@westwoodcarpentry.ca": {
+    "email": "hello@westwoodcarpentry.ca",
+    "company_name": "Westwood Carpentry",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@buildtechcarpentry.com": {
+    "email": "info@buildtechcarpentry.com",
+    "company_name": "BuildTech Carpentry",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@carpenternearmeottawa.com": {
+    "email": "info@carpenternearmeottawa.com",
+    "company_name": "Carpenter Near Me Ottawa",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@jrps.co.uk": {
+    "email": "info@jrps.co.uk",
+    "company_name": "JRPS Group",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@technicfloors.co.uk": {
+    "email": "info@technicfloors.co.uk",
+    "company_name": "Technic Floors",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@sloanconstructionltd.co.uk": {
+    "email": "info@sloanconstructionltd.co.uk",
+    "company_name": "Sloan Construction Ltd",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@lmflooringltd.co.uk": {
+    "email": "info@lmflooringltd.co.uk",
+    "company_name": "L M Flooring  Ltd",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@tecateroofing.com": {
+    "email": "info@tecateroofing.com",
+    "company_name": "Tecate Roofing",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@aroofing.us": {
+    "email": "info@aroofing.us",
+    "company_name": "A Roofing",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@cfroofllc.com": {
+    "email": "info@cfroofllc.com",
+    "company_name": "CF Roofing",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@compton-builders.com": {
+    "email": "info@compton-builders.com",
+    "company_name": "Compton Roofing",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@seattle-wa-concrete.com": {
+    "email": "info@seattle-wa-concrete.com",
+    "company_name": "Seattle Concrete",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@concrete-seattle.com": {
+    "email": "info@concrete-seattle.com",
+    "company_name": "Seattle Concrete Co",
+    "sender": "andrew4522@gmail.com",
+    "campaign_id": 3206423,
+    "dispatched_at": "2026-10-23 11:12:11"
+  },
+  "info@concretecontractorseattle.net": {
+    "email": "info@concretecontractorseattle.net",
+    "company_name": "Concrete Contractor Seattle",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "info@nwconcreteexperts.com": {
+    "email": "info@nwconcreteexperts.com",
+    "company_name": "NW Concrete Experts",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "concrete@kingconcreteseattle.com": {
+    "email": "concrete@kingconcreteseattle.com",
+    "company_name": "King Concrete Seattle",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "seaconcretecontractors@gmail.com": {
+    "email": "seaconcretecontractors@gmail.com",
+    "company_name": "SEA Concrete Contractors",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "amitypainting@live.com": {
+    "email": "amitypainting@live.com",
+    "company_name": "Amity Painting Company, LLC",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "info@exteriorpainterseattle.com": {
+    "email": "info@exteriorpainterseattle.com",
+    "company_name": "Exterior Painters Seattle",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "info@spokaneroofing.com": {
+    "email": "info@spokaneroofing.com",
+    "company_name": "Spokane Roofing Company",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "info@priorityroofingnw.com": {
+    "email": "info@priorityroofingnw.com",
+    "company_name": "Priority Roofing and Construction LLC",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "info@perrenoudroofing.com": {
+    "email": "info@perrenoudroofing.com",
+    "company_name": "Perrenoud Roofing Inc",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "sales@rcroofingspokane.com": {
+    "email": "sales@rcroofingspokane.com",
+    "company_name": "RC Roofing Specialists",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "info@concrete-spokane.com": {
+    "email": "info@concrete-spokane.com",
+    "company_name": "Spokane Concrete Co",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "info@spokaneconcrete.com": {
+    "email": "info@spokaneconcrete.com",
+    "company_name": "Spokane Concrete & Excavating",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "info@rmkcustomconcrete.com": {
+    "email": "info@rmkcustomconcrete.com",
+    "company_name": "RMK Custom Concrete Inc",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "greg@baconconcrete.com": {
+    "email": "greg@baconconcrete.com",
+    "company_name": "Bacon Concrete, Inc",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "rob@baconconcrete.com": {
+    "email": "rob@baconconcrete.com",
+    "company_name": "Bacon Concrete, Inc",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "josh@baconconcrete.com": {
+    "email": "josh@baconconcrete.com",
+    "company_name": "Bacon Concrete, Inc",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "general@acmeroofingwa.com": {
+    "email": "general@acmeroofingwa.com",
+    "company_name": "ACME Roofing",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "marketing@tristate.pro": {
+    "email": "marketing@tristate.pro",
+    "company_name": "Tristate Roofing, Inc",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "jtcorporation1@gmail.com": {
+    "email": "jtcorporation1@gmail.com",
+    "company_name": "JT Roofing",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "info@actionpaintandcontracting.com": {
+    "email": "info@actionpaintandcontracting.com",
+    "company_name": "Action Paint & Contracting",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "allpaintingoffice@gmail.com": {
+    "email": "allpaintingoffice@gmail.com",
+    "company_name": "All Painting Coatings & More, LLC",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "ghouse@certapro.com": {
+    "email": "ghouse@certapro.com",
+    "company_name": "CertaPro Painters of Tacoma",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "hi@tacomaconcretecompany.com": {
+    "email": "hi@tacomaconcretecompany.com",
+    "company_name": "Tacoma Concrete Company",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "info@concretetech.com": {
+    "email": "info@concretetech.com",
+    "company_name": "Concrete Technology Corporation",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "sandysinc@outlook.com": {
+    "email": "sandysinc@outlook.com",
+    "company_name": "Sandy's Concrete Inc",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "info@portlandroofingco.com": {
+    "email": "info@portlandroofingco.com",
+    "company_name": "Portland Roofing Company",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "office@ccandlroofing.com": {
+    "email": "office@ccandlroofing.com",
+    "company_name": "C C & L Roofing Co",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "office@roofportland.com": {
+    "email": "office@roofportland.com",
+    "company_name": "Elements Roofing",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "info@portlandiaroofing.com": {
+    "email": "info@portlandiaroofing.com",
+    "company_name": "Portlandia Roofing LLC",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "contact@commercialroofersportland.com": {
+    "email": "contact@commercialroofersportland.com",
+    "company_name": "Commercial Roofers Portland",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "info@portlandconcretecompany.net": {
+    "email": "info@portlandconcretecompany.net",
+    "company_name": "Portland Concrete Company",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "info@portland-concrete-company.com": {
+    "email": "info@portland-concrete-company.com",
+    "company_name": "Portland Concrete",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "contact@oregonconcretecompany.com": {
+    "email": "contact@oregonconcretecompany.com",
+    "company_name": "Oregon Concrete Company",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "info@portlandconcretecompany.com": {
+    "email": "info@portlandconcretecompany.com",
+    "company_name": "Alternative Portland Concrete Company Listing",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "dmitriy@paintportlandllc.com": {
+    "email": "dmitriy@paintportlandllc.com",
+    "company_name": "Paint Portland LLC",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "correopainting@gmail.com": {
+    "email": "correopainting@gmail.com",
+    "company_name": "Correo Painting LLC",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "office@popainting.com": {
+    "email": "office@popainting.com",
+    "company_name": "Professional Oregon Painting",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "contact.elpintor@gmail.com": {
+    "email": "contact.elpintor@gmail.com",
+    "company_name": "El Pintor Painting",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "portland.paintspdx@gmail.com": {
+    "email": "portland.paintspdx@gmail.com",
+    "company_name": "Portland Paints",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "myproject@buildandpaintportland.com": {
+    "email": "myproject@buildandpaintportland.com",
+    "company_name": "Build & Paint Portland",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "info@evergreenroofing.com": {
+    "email": "info@evergreenroofing.com",
+    "company_name": "Evergreen Roofing of Oregon",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "office@romanroofingandconstruction.com": {
+    "email": "office@romanroofingandconstruction.com",
+    "company_name": "Roman Roofing And Construction, LLC",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "rockroofing@gmail.com": {
+    "email": "rockroofing@gmail.com",
+    "company_name": "Rock Roofing & Sheet Metal",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "nationalroofing@yahoo.com": {
+    "email": "nationalroofing@yahoo.com",
+    "company_name": "National Roofing & Construction",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "sales@roofbystorm.com": {
+    "email": "sales@roofbystorm.com",
+    "company_name": "Storm Roofing",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "info@renueit.com": {
+    "email": "info@renueit.com",
+    "company_name": "Roof Savers Eugene",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "obsidianroofing@gmail.com": {
+    "email": "obsidianroofing@gmail.com",
+    "company_name": "Obsidian Roofing",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "bend.mastersroofing@gmail.com": {
+    "email": "bend.mastersroofing@gmail.com",
+    "company_name": "Masters Roofing LLC",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "olivia@am1roofing.com": {
+    "email": "olivia@am1roofing.com",
+    "company_name": "AM-1 Roofing, Inc",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
+  },
+  "info@riverroofingbend.com": {
+    "email": "info@riverroofingbend.com",
+    "company_name": "River Roofing Bend LLC",
+    "sender": "andrew@bridgingtheaigap.com",
+    "campaign_id": 3206424,
+    "dispatched_at": "2026-10-23 11:12:33"
   }
 }
