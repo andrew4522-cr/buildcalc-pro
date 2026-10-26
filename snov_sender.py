@@ -43,23 +43,32 @@ BASE_URL = "https://api.snov.io"
 SITE_BASE_URL = "https://andrew4522-cr.github.io/buildcalc-pro"
 GUMROAD_PRODUCT_URL = "https://andrewverse7567.gumroad.com/l/BuildCalcPro"
 
-# Sender Mailbox Accounts
+# Sender Mailbox Accounts (Consolidated into 2 Permanent Master Campaigns)
 SENDERS = {
     "andrew4522@gmail.com": {
         "id": 813095,
         "name": "Andrew Anderson",
         "email": "andrew4522@gmail.com",
+        "master_campaign_id": 3209166,
+        "master_list_id": 41759386,
     },
     "andrew@bridgingtheaigap.com": {
         "id": 811780,
         "name": "Andrew",
         "email": "andrew@bridgingtheaigap.com",
+        "master_campaign_id": 3209167,
+        "master_list_id": 41759405,
     }
 }
 
 # Dedicated Link-Clicker Follow-Up Campaign & List (2 follow-ups: +3d and +7d)
 ENGAGED_CLICKERS_LIST_ID = 41635590
 ENGAGED_CLICKERS_CAMPAIGN_ID = 3197307
+MONITORED_CAMPAIGN_IDS = [
+    3209166, 3209167,
+    3197279, 3197280, 3199463, 3199465, 3201451, 3202838,
+    3203195, 3203199, 3204924, 3204928, 3206424, 3207566, 3207567, 3208018
+]
 
 # Trade to Tool Page Mapping
 TRADE_PAGES = {
@@ -344,10 +353,25 @@ BuildCalc Pro Team<br>
         sender_id = sender["id"]
         sender_email = sender["email"]
         sender_name = sender["name"]
+        master_list_id = sender.get("master_list_id")
+        master_camp_id = sender.get("master_campaign_id")
 
-        logger.info(f"--- Preparing Campaign for {sender_email} ({len(leads)} leads) ---")
+        logger.info(f"--- Preparing Batch for {sender_email} ({len(leads)} leads) ---")
 
-        # 1. Create Dedicated Prospect List
+        if master_list_id and master_camp_id:
+            enrolled = 0
+            for lead in leads:
+                if self.add_prospect(master_list_id, lead):
+                    enrolled += 1
+                time.sleep(0.3)
+            logger.info(f"Enrolled {enrolled}/{len(leads)} verified contractors into Master List {master_list_id} (Master Campaign {master_camp_id})")
+            try:
+                self._request("POST", f"/v2/campaigns/{master_camp_id}/action", {"action": "start"})
+            except Exception as e:
+                logger.warning(f"Master campaign {master_camp_id} already active or start notice: {e}")
+            return master_camp_id
+
+        # Fallback: Create Dedicated Prospect List & Campaign if no Master configured
         list_name = f"BuildCalc-{sender_name.split()[0]}-{batch_name}"[:40]
         list_id = self.create_prospect_list(list_name)
         if not list_id:
@@ -381,7 +405,7 @@ BuildCalc Pro Team<br>
             "priority": "medium",
             "email_accounts": [sender_id],
             "recipients": {"list_id": list_id},
-            "complete_campaign_after_last_step": True,
+            "complete_campaign_after_last_step": False,
             "archive_in_months": 3,
             "tracking": {"open": True, "link_click": True},
             "sending_settings": {
@@ -487,7 +511,7 @@ BuildCalc Pro Team<br>
         and Follow-Up 2 after 7 days (4 days after Follow-Up 1).
         """
         if not campaign_ids:
-            campaign_ids = [3197279, 3197280]
+            campaign_ids = MONITORED_CAMPAIGN_IDS
 
         ledger_file = Path(__file__).parent / "dist" / "outreach" / "clicked_leads_ledger.json"
         ledger_file.parent.mkdir(parents=True, exist_ok=True)

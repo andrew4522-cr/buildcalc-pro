@@ -1,0 +1,25 @@
+{
+  "masters": {
+    "andrew4522@gmail.com": {
+      "campaign_id": 3209166,
+      "list_id": 41759386
+    },
+    "andrew@bridgingtheaigap.com": {
+      "campaign_id": 3209167,
+      "list_id": 41759405
+    }
+  },
+  "monitored_campaigns": [
+    3197279,
+    3197280,
+    3199463,
+    3199465,
+    3201451,
+    3202838,
+    3207566,
+    3207567,
+    3208018,
+    3209166,
+    3209167
+  ]
+}
