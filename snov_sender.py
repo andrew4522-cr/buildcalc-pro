@@ -61,9 +61,9 @@ SENDERS = {
     }
 }
 
-# Dedicated Link-Clicker Follow-Up Campaign & List (2 follow-ups: +3d and +7d)
-ENGAGED_CLICKERS_LIST_ID = 41635590
-ENGAGED_CLICKERS_CAMPAIGN_ID = 3197307
+# Dedicated Link-Clicker Immediate Personal Outreach Campaign & List (Step 1 = Immediate 2-sentence email, then +3d and +7d)
+ENGAGED_CLICKERS_LIST_ID = 41779545
+ENGAGED_CLICKERS_CAMPAIGN_ID = 3212298
 MONITORED_CAMPAIGN_IDS = [
     3209166, 3209167,
     3197279, 3197280, 3199463, 3199465, 3201451, 3202838,
@@ -142,8 +142,9 @@ class SnovOutreachEngine:
         return r.json()
 
     def configure_sender_delays(self):
-        """Sets 35-second delay between sends on both mailboxes."""
+        """Sets 100/day send limit and 35-second delay between sends on both mailboxes."""
         patch_body = {
+            "limitation": 100,
             "delay_from": 35,
             "delay_to": 36,
             "delay_type": "random"
@@ -152,9 +153,9 @@ class SnovOutreachEngine:
             sid = info["id"]
             try:
                 res = self._request("PATCH", f"/v2/sender-accounts/emails/{sid}", patch_body)
-                logger.info(f"Verified 35s send delay configured on sender {email} (ID: {sid})")
+                logger.info(f"Verified 100/day limit & 35s send delay configured on sender {email} (ID: {sid})")
             except Exception as e:
-                logger.warning(f"Could not update sender delay for {email}: {e}")
+                logger.warning(f"Could not update sender delay/limit for {email}: {e}")
 
     def verify_links(self) -> bool:
         """Pre-flight check: verifies all outreach landing pages return HTTP 200."""
@@ -289,6 +290,20 @@ BuildCalc Pro Team<br>
 <a href="mailto:{sender_email}">{sender_email}</a></p>
 """
 
+        # Click Immediate Personal Email: Triggered immediately upon link click (0 delay)
+        subject_click_instant = "quick question on your BuildCalc estimate"
+        body_html_click_instant = f"""<p>Hey {{{{company_name}}}} team,</p>
+
+<p>Saw you checked out the BuildCalc estimator &mdash; if you send me your logo, I'll pre-load a custom branded version for your crew today for free.</p>
+
+<p>Just reply here with your logo (or website) and I'll send your custom link right back, or open the estimator directly here:<br>
+<strong><a href="{SITE_BASE_URL}/contractor-estimate-template.html?utm_source=outreach&amp;utm_medium=email&amp;utm_campaign=click_instant">Open BuildCalc Pro &rarr;</a></strong></p>
+
+<p>Best,<br>
+<strong>{sender_name}</strong><br>
+<a href="mailto:{sender_email}">{sender_email}</a></p>
+"""
+
         # Click Follow-Up 1: Triggered 3 days after clicking the link
         subject_click_fu1 = "{{company_name}} bid format (+ quick question)"
         body_html_click_fu1 = f"""<p>Hey {{{{company_name}}}} team,</p>
@@ -341,6 +356,8 @@ BuildCalc Pro Team<br>
         return {
             "subject_1": subject_1,
             "body_html_1": body_html_1,
+            "subject_click_instant": subject_click_instant,
+            "body_html_click_instant": body_html_click_instant,
             "subject_click_fu1": subject_click_fu1,
             "body_html_click_fu1": body_html_click_fu1,
             "subject_click_fu2": subject_click_fu2,
@@ -386,16 +403,18 @@ BuildCalc Pro Team<br>
             time.sleep(0.3)
         logger.info(f"Enrolled {enrolled}/{len(leads)} verified contractors into list {list_id}")
 
-        # 3. Build Hormozi Sequence with Native Click Trigger (Delay 3d -> FU1 -> Delay 4d -> FU2)
+        # 3. Build Hormozi Sequence with Native Click Trigger (Immediate 2-Sentence Email -> Delay 3d -> FU1 -> Delay 4d -> FU2)
         t0 = int(time.time() * 1000)
         s1_ref = str(t0)
         c1_id = int(s1_ref + "0")
         trig_ref = str(t0 + 1)
-        d1_ref = str(t0 + 2)
-        f1_ref = str(t0 + 3)
+        f0_ref = str(t0 + 2)
+        cf0_id = int(f0_ref + "0")
+        d1_ref = str(t0 + 3)
+        f1_ref = str(t0 + 4)
         cf1_id = int(f1_ref + "0")
-        d2_ref = str(t0 + 4)
-        f2_ref = str(t0 + 5)
+        d2_ref = str(t0 + 5)
+        f2_ref = str(t0 + 6)
         cf2_id = int(f2_ref + "0")
 
         copy_data = self.build_hormozi_copy({}, sender_name, sender_email)
@@ -431,7 +450,14 @@ BuildCalc Pro Team<br>
                         "action": "click",
                         "waiting_type": "days",
                         "waiting_val": 14,
-                        "yes": d1_ref
+                        "yes": f0_ref
+                    },
+                    {
+                        "_ref": f0_ref,
+                        "type": "email",
+                        "content_slots": 1,
+                        "content": [{"id": cf0_id, "plain_text": False, "usage": "active"}],
+                        "next": d1_ref
                     },
                     {
                         "_ref": d1_ref,
@@ -472,13 +498,21 @@ BuildCalc Pro Team<br>
             return None
         logger.info(f"Campaign shell created: ID {camp_id}")
 
-        # 5. Inject Step 1 (Initial Pitch), Click FU1 (+3d), and Click FU2 (+7d) Content
+        # 5. Inject Step 1 (Initial Pitch), Click Instant (0d), Click FU1 (+3d), and Click FU2 (+7d) Content
         self._request("POST", f"/v2/campaigns/{camp_id}/steps/{s1_ref}/content/create", {
             "content_id": c1_id,
             "plain_text": False,
             "usage": "active",
             "subject": copy_data["subject_1"],
             "body": copy_data["body_html_1"]
+        })
+
+        self._request("POST", f"/v2/campaigns/{camp_id}/steps/{f0_ref}/content/create", {
+            "content_id": cf0_id,
+            "plain_text": False,
+            "usage": "active",
+            "subject": copy_data["subject_click_instant"],
+            "body": copy_data["body_html_click_instant"]
         })
 
         self._request("POST", f"/v2/campaigns/{camp_id}/steps/{f1_ref}/content/create", {
@@ -506,9 +540,10 @@ BuildCalc Pro Team<br>
         """
         Monitors link clicks across active outreach campaigns.
         When any recipient clicks the link, auto-enrolls them into the dedicated
-        'BuildCalc-Engaged-Clickers' campaign list (ID 41635590).
-        This guarantees the recipient automatically receives Follow-Up 1 after 3 days
-        and Follow-Up 2 after 7 days (4 days after Follow-Up 1).
+        'BuildCalc-Clickers-Immediate' campaign list (ID 41779545, Campaign 3212298).
+        Because Step 1 of Campaign 3212298 is an immediate email (0 delay), the clicker
+        immediately receives the 2-sentence personal logo offer email, followed by
+        Follow-Up 1 (+3 days) and Follow-Up 2 (+7 days).
         """
         if not campaign_ids:
             campaign_ids = MONITORED_CAMPAIGN_IDS
@@ -535,7 +570,7 @@ BuildCalc Pro Team<br>
                         continue
                     company = item.get("companyName") or item.get("prospectFirstName") or item.get("prospectName") or ""
                     if email not in ledger:
-                        logger.info(f"[NEW LINK CLICK] Prospect {email} ({company}) clicked in campaign {cid}! Enrolling into click follow-up sequence...")
+                        logger.info(f"[NEW LINK CLICK] Prospect {email} ({company}) clicked in campaign {cid}! Enrolling into immediate 2-sentence personal outreach...")
                         added = self.add_prospect(ENGAGED_CLICKERS_LIST_ID, {
                             "email": email,
                             "first_name": company,
@@ -549,13 +584,21 @@ BuildCalc Pro Team<br>
                             "clicked_link": item.get("link") or item.get("links") or item.get("sourcePage"),
                             "clicked_time": item.get("visitedAt") or item.get("time") or time.strftime("%Y-%m-%d %H:%M:%S"),
                             "enrolled_at": time.strftime("%Y-%m-%d %H:%M:%S"),
-                            "enrolled": added
+                            "enrolled": added,
+                            "immediate_click_campaign_id": ENGAGED_CLICKERS_CAMPAIGN_ID,
+                            "immediate_click_list_id": ENGAGED_CLICKERS_LIST_ID,
                         }
                         if added:
                             newly_enrolled.append(ledger[email])
-                            logger.info(f"Successfully enrolled clicker {email} into Clickers Follow-Up campaign {ENGAGED_CLICKERS_CAMPAIGN_ID}")
+                            logger.info(f"Successfully enrolled clicker {email} into Immediate Clickers Campaign {ENGAGED_CLICKERS_CAMPAIGN_ID}")
             except Exception as e:
                 logger.warning(f"Error checking clicks for campaign {cid}: {e}")
+
+        if newly_enrolled:
+            try:
+                self._request("POST", f"/v2/campaigns/{ENGAGED_CLICKERS_CAMPAIGN_ID}/action", {"action": "start"})
+            except Exception as e:
+                logger.debug(f"Immediate clickers campaign {ENGAGED_CLICKERS_CAMPAIGN_ID} already active: {e}")
 
         with open(ledger_file, "w", encoding="utf-8") as f:
             json.dump(ledger, f, indent=2)
