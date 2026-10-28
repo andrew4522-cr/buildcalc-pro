@@ -244,8 +244,7 @@ class SnovOutreachEngine:
             "firstName": first_name,
             "lastName": last_name,
             "companyName": company,
-            "position": lead.get("trade", "Contractor"),
-            "updateContact": 1
+            "position": lead.get("trade", "Contractor")
         }
         try:
             res = self._request("POST", "/v1/add-prospect-to-list", payload)
