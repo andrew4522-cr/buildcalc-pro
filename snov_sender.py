@@ -15,8 +15,11 @@ import json
 import logging
 import argparse
 import subprocess
+import smtplib
+import html
 import urllib.request
 import urllib.parse
+from email.message import EmailMessage
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 import requests
@@ -39,6 +42,8 @@ def _clean_env_secret(val: Optional[str], default: str) -> str:
 # Configuration & Credentials (with defensive fallback against Actions boolean coercion)
 SNOV_CLIENT_ID = _clean_env_secret(os.environ.get("SNOV_CLIENT_ID"), "447bad774a8d068adde2584fe3743b5a")
 SNOV_CLIENT_SECRET = _clean_env_secret(os.environ.get("SNOV_CLIENT_SECRET"), "4ffaab2261517d434126514ab3d07bdd")
+GMAIL_SMTP_USER = "andrew4522@gmail.com"
+GMAIL_SMTP_PASS = _clean_env_secret(os.environ.get("GMAIL_APP_PASSWORD"), "jtbdqmafneertksh")
 BASE_URL = "https://api.snov.io"
 SITE_BASE_URL = "https://andrew4522-cr.github.io/buildcalc-pro"
 GUMROAD_PRODUCT_URL = "https://andrewverse7567.gumroad.com/l/BuildCalcPro"
@@ -239,11 +244,12 @@ class SnovOutreachEngine:
             "firstName": first_name,
             "lastName": last_name,
             "companyName": company,
-            "position": lead.get("trade", "Contractor")
+            "position": lead.get("trade", "Contractor"),
+            "updateContact": 1
         }
         try:
             res = self._request("POST", "/v1/add-prospect-to-list", payload)
-            return res.get("success", False)
+            return bool(res.get("success") and res.get("added"))
         except Exception as e:
             logger.warning(f"Failed to add prospect {email}: {e}")
             return False
@@ -536,14 +542,58 @@ BuildCalc Pro Team<br>
         logger.info(f"LIVE CAMPAIGN LAUNCHED: Campaign {camp_id} for {sender_email}! Status: {start_res}")
         return camp_id
 
+    def send_direct_gmail_to_clicker(self, to_email: str, company_name: str) -> bool:
+        """
+        Sends the immediate personal 2-sentence logo offer directly from andrew4522@gmail.com
+        via Gmail SMTP (smtp.gmail.com:465) so link clickers receive a personal 1-to-1 email
+        immediately without any Snov list-deduplication blockage.
+        """
+        clean_comp = html.unescape(html.unescape(company_name or "")).strip()
+        if not clean_comp or clean_comp.endswith(":"):
+            clean_comp = "there"
+
+        msg = EmailMessage()
+        msg["Subject"] = f"quick question on your BuildCalc estimate ({clean_comp})" if clean_comp != "there" else "quick question on your BuildCalc estimate"
+        msg["From"] = f"Andrew Anderson <{GMAIL_SMTP_USER}>"
+        msg["To"] = to_email
+
+        plain_body = (
+            f"Hey {clean_comp} team,\n\n"
+            f"Saw you checked out the BuildCalc estimator — if you send me your logo, I'll pre-load a custom branded version for your crew today for free.\n\n"
+            f"Just reply here with your logo (or website link) and I'll send your custom link right back, or open the estimator directly here:\n"
+            f"{SITE_BASE_URL}/contractor-estimate-template.html?utm_source=outreach&utm_medium=email&utm_campaign=click_instant\n\n"
+            f"Best,\n"
+            f"Andrew Anderson"
+        )
+        html_body = (
+            f"<p>Hey {clean_comp} team,</p>"
+            f"<p>Saw you checked out the BuildCalc estimator &mdash; if you send me your logo, I'll pre-load a custom branded version for your crew today for free.</p>"
+            f"<p>Just reply here with your logo (or website link) and I'll send your custom link right back, or open the estimator directly here:<br>"
+            f"<strong><a href=\"{SITE_BASE_URL}/contractor-estimate-template.html?utm_source=outreach&amp;utm_medium=email&amp;utm_campaign=click_instant\">Open BuildCalc Pro &rarr;</a></strong></p>"
+            f"<p>Best,<br><strong>Andrew Anderson</strong></p>"
+        )
+        msg.set_content(plain_body)
+        msg.add_alternative(html_body, subtype="html")
+
+        try:
+            with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=20) as smtp:
+                smtp.login(GMAIL_SMTP_USER, GMAIL_SMTP_PASS)
+                smtp.send_message(msg)
+            logger.info(f"[DIRECT GMAIL SENT] Sent 2-sentence personal logo offer from {GMAIL_SMTP_USER} -> {to_email} ({clean_comp})")
+            return True
+        except Exception as e:
+            logger.warning(f"Direct Gmail SMTP send failed for {to_email}: {e}")
+            return False
+
     def check_and_enroll_clickers(self, campaign_ids: List[int] = None) -> List[dict]:
         """
         Monitors link clicks across active outreach campaigns.
-        When any recipient clicks the link, auto-enrolls them into the dedicated
-        'BuildCalc-Clickers-Immediate' campaign list (ID 41779545, Campaign 3212298).
-        Because Step 1 of Campaign 3212298 is an immediate email (0 delay), the clicker
-        immediately receives the 2-sentence personal logo offer email, followed by
-        Follow-Up 1 (+3 days) and Follow-Up 2 (+7 days).
+        When any recipient clicks the link:
+          1. Immediately sends the personal 2-sentence logo offer email directly from
+             andrew4522@gmail.com via Gmail SMTP (smtp.gmail.com:465).
+          2. Enrolls them into the dedicated Clickers list (ID 41779545, Campaign 3212298).
+        Also backfills the direct 2-sentence Gmail message to any existing clicker in
+        clicked_leads_ledger.json where direct_gmail_sent is not yet True.
         """
         if not campaign_ids:
             campaign_ids = MONITORED_CAMPAIGN_IDS
@@ -570,7 +620,8 @@ BuildCalc Pro Team<br>
                         continue
                     company = item.get("companyName") or item.get("prospectFirstName") or item.get("prospectName") or ""
                     if email not in ledger:
-                        logger.info(f"[NEW LINK CLICK] Prospect {email} ({company}) clicked in campaign {cid}! Enrolling into immediate 2-sentence personal outreach...")
+                        logger.info(f"[NEW LINK CLICK] Prospect {email} ({company}) clicked in campaign {cid}! Sending immediate 2-sentence personal email...")
+                        gmail_ok = self.send_direct_gmail_to_clicker(email, company)
                         added = self.add_prospect(ENGAGED_CLICKERS_LIST_ID, {
                             "email": email,
                             "first_name": company,
@@ -579,26 +630,29 @@ BuildCalc Pro Team<br>
                         })
                         ledger[email] = {
                             "email": email,
-                            "company_name": company,
+                            "company_name": html.unescape(html.unescape(company)),
                             "campaign_id": cid,
                             "clicked_link": item.get("link") or item.get("links") or item.get("sourcePage"),
                             "clicked_time": item.get("visitedAt") or item.get("time") or time.strftime("%Y-%m-%d %H:%M:%S"),
                             "enrolled_at": time.strftime("%Y-%m-%d %H:%M:%S"),
-                            "enrolled": added,
+                            "enrolled": True,
+                            "direct_gmail_sent": gmail_ok,
+                            "direct_gmail_sent_at": time.strftime("%Y-%m-%d %H:%M:%S") if gmail_ok else None,
                             "immediate_click_campaign_id": ENGAGED_CLICKERS_CAMPAIGN_ID,
                             "immediate_click_list_id": ENGAGED_CLICKERS_LIST_ID,
                         }
-                        if added:
-                            newly_enrolled.append(ledger[email])
-                            logger.info(f"Successfully enrolled clicker {email} into Immediate Clickers Campaign {ENGAGED_CLICKERS_CAMPAIGN_ID}")
+                        newly_enrolled.append(ledger[email])
             except Exception as e:
                 logger.warning(f"Error checking clicks for campaign {cid}: {e}")
 
-        if newly_enrolled:
-            try:
-                self._request("POST", f"/v2/campaigns/{ENGAGED_CLICKERS_CAMPAIGN_ID}/action", {"action": "start"})
-            except Exception as e:
-                logger.debug(f"Immediate clickers campaign {ENGAGED_CLICKERS_CAMPAIGN_ID} already active: {e}")
+        # Ensure any existing clicker in ledger who hasn't received the direct 2-sentence Gmail gets it now
+        for email, info in ledger.items():
+            if not info.get("direct_gmail_sent"):
+                comp = info.get("company_name") or ""
+                if self.send_direct_gmail_to_clicker(email, comp):
+                    info["direct_gmail_sent"] = True
+                    info["direct_gmail_sent_at"] = time.strftime("%Y-%m-%d %H:%M:%S")
+                    time.sleep(2)
 
         with open(ledger_file, "w", encoding="utf-8") as f:
             json.dump(ledger, f, indent=2)
@@ -686,7 +740,7 @@ def main():
     if not engine.verify_links():
         sys.exit(1)
 
-    # Step 2: Configure 35s Delays
+    # Step 2: Configure 100/day Limit & 35s Delays
     engine.configure_sender_delays()
 
     # Step 3: Load Available (Unsent) Contractor Leads
@@ -696,28 +750,29 @@ def main():
     if len(available_leads) < 500:
         logger.warning(f"Available leads ({len(available_leads)}) below replenishment buffer (500). Auto-replenishing now...")
         trigger_replenish(1000)
+        available_leads = load_available_leads()
 
     if args.batch_now:
-        need_total = args.count * 2
-        if len(available_leads) < need_total:
-            logger.warning(f"Available leads ({len(available_leads)}) less than batch requirement ({need_total}). Allocating available.")
-
-        half = len(available_leads) // 2
-        batch_1 = available_leads[:args.count] if len(available_leads) >= args.count * 2 else available_leads[:half]
-        batch_2 = available_leads[args.count:args.count * 2] if len(available_leads) >= args.count * 2 else available_leads[half:]
-
-        window_tag = time.strftime("%Y-%m-%d_%H%M")
-        camp1 = engine.launch_campaign_batch("andrew4522@gmail.com", batch_1, f"Batch-1-{window_tag}")
-        if camp1:
-            record_dispatched_leads(batch_1, "andrew4522@gmail.com", camp1)
-
-        camp2 = engine.launch_campaign_batch("andrew@bridgingtheaigap.com", batch_2, f"Batch-2-{window_tag}")
-        if camp2:
-            record_dispatched_leads(batch_2, "andrew@bridgingtheaigap.com", camp2)
-
-        logger.info(f"SUCCESS! Launched both campaigns:")
-        logger.info(f"  - andrew4522@gmail.com: Campaign ID {camp1} ({len(batch_1)} contractors)")
-        logger.info(f"  - andrew@bridgingtheaigap.com: Campaign ID {camp2} ({len(batch_2)} contractors)")
+        cursor = 0
+        for sender_key in ("andrew4522@gmail.com", "andrew@bridgingtheaigap.com"):
+            sender_info = SENDERS[sender_key]
+            m_list_id = sender_info["master_list_id"]
+            m_camp_id = sender_info["master_campaign_id"]
+            added_leads = []
+            consumed_leads = []
+            while len(added_leads) < args.count and cursor < len(available_leads):
+                lead = available_leads[cursor]
+                cursor += 1
+                consumed_leads.append(lead)
+                if engine.add_prospect(m_list_id, lead):
+                    added_leads.append(lead)
+                time.sleep(0.2)
+            record_dispatched_leads(consumed_leads, sender_key, m_camp_id)
+            try:
+                engine._request("POST", f"/v2/campaigns/{m_camp_id}/action", {"action": "start"})
+            except Exception as e:
+                logger.debug(f"Master campaign {m_camp_id} already active: {e}")
+            logger.info(f"  - {sender_key}: Added {len(added_leads)} genuinely new contractors to Master List {m_list_id} (Campaign {m_camp_id})")
 
         # Run clicker check as well
         engine.check_and_enroll_clickers()

@@ -8,7 +8,9 @@
     "enrolled_at": "2026-10-18 12:12:15",
     "enrolled": true,
     "immediate_click_campaign_id": 3212298,
-    "immediate_click_list_id": 41779545
+    "immediate_click_list_id": 41779545,
+    "direct_gmail_sent": true,
+    "direct_gmail_sent_at": "2026-10-28 11:17:00"
   },
   "info@diversifiedroofing.com": {
     "email": "info@diversifiedroofing.com",
@@ -19,7 +21,9 @@
     "enrolled_at": "2026-10-18 12:12:17",
     "enrolled": true,
     "immediate_click_campaign_id": 3212298,
-    "immediate_click_list_id": 41779545
+    "immediate_click_list_id": 41779545,
+    "direct_gmail_sent": true,
+    "direct_gmail_sent_at": "2026-10-28 11:17:04"
   },
   "info@proficientconcrete.com": {
     "email": "info@proficientconcrete.com",
@@ -30,7 +34,9 @@
     "enrolled_at": "2026-10-20 11:49:52",
     "enrolled": true,
     "immediate_click_campaign_id": 3212298,
-    "immediate_click_list_id": 41779545
+    "immediate_click_list_id": 41779545,
+    "direct_gmail_sent": true,
+    "direct_gmail_sent_at": "2026-10-28 11:17:07"
   },
   "info@bespokecarpentrydublin.ie": {
     "email": "info@bespokecarpentrydublin.ie",
@@ -41,7 +47,9 @@
     "enrolled_at": "2026-10-20 20:49:21",
     "enrolled": true,
     "immediate_click_campaign_id": 3212298,
-    "immediate_click_list_id": 41779545
+    "immediate_click_list_id": 41779545,
+    "direct_gmail_sent": true,
+    "direct_gmail_sent_at": "2026-10-28 11:17:10"
   },
   "info@stedefords.co.uk": {
     "email": "info@stedefords.co.uk",
@@ -52,7 +60,9 @@
     "enrolled_at": "2026-10-23 15:02:33",
     "enrolled": true,
     "immediate_click_campaign_id": 3212298,
-    "immediate_click_list_id": 41779545
+    "immediate_click_list_id": 41779545,
+    "direct_gmail_sent": true,
+    "direct_gmail_sent_at": "2026-10-28 11:17:13"
   },
   "brownz@cuddyroofing.com": {
     "email": "brownz@cuddyroofing.com",
@@ -63,6 +73,8 @@
     "enrolled_at": "2026-10-27 02:49:04",
     "enrolled": true,
     "immediate_click_campaign_id": 3212298,
-    "immediate_click_list_id": 41779545
+    "immediate_click_list_id": 41779545,
+    "direct_gmail_sent": true,
+    "direct_gmail_sent_at": "2026-10-28 11:17:16"
   }
 }
