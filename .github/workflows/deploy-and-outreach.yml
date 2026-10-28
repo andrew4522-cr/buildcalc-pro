@@ -1,11 +1,6 @@
 name: Deploy pSEO Site & Run Daily Contractor Outreach Loop
 
 on:
-  push:
-    branches: ["main", "master"]
-  schedule:
-    # Runs automatically every day at 13:00 UTC (9:00 AM EST)
-    - cron: "0 13 * * *"
   workflow_dispatch:
 
 permissions:
@@ -28,19 +23,6 @@ jobs:
       - name: Build 52 pSEO Pages, MV3 Extension & Android Bundle
         run: python build_suite.py
 
-      - name: Scrape Fresh Contractor Leads & Generate Hormozi Outreach Queue
-        env:
-          BUILDCALC_URL: ${{ vars.BUILDCALC_URL || 'https://buildcalcpro.github.io' }}
-          SMTP_HOST: ${{ secrets.SMTP_HOST || 'smtp.gmail.com' }}
-          SMTP_PORT: ${{ secrets.SMTP_PORT || '465' }}
-          SMTP_USER: ${{ secrets.SMTP_USER }}
-          SMTP_PASS: ${{ secrets.SMTP_PASS }}
-        run: |
-          if [ -n "$SMTP_USER" ] && [ -n "$SMTP_PASS" ]; then
-            python outreach_bot.py --limit 35 --send
-          else
-            python outreach_bot.py --limit 35
-          fi
 
       - name: Upload GitHub Pages Artifact
         uses: actions/upload-pages-artifact@v3

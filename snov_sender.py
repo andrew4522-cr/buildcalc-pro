@@ -717,6 +717,8 @@ def trigger_replenish(target_add: int = 1000):
 
 
 def main():
+    logger.warning("BuildCalc Pro outreach & follow-ups permanently KILLED (2026-10-28). Exiting immediately without sending.")
+    return
     parser = argparse.ArgumentParser(description="BuildCalc Pro Snov.io Outreach Engine")
     parser.add_argument("--batch-now", action="store_true", help="Launch today's 50+50 batch immediately")
     parser.add_argument("--check-clicks", action="store_true", help="Poll campaigns for link clicks and enroll clickers into follow-up sequence")

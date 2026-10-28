@@ -402,6 +402,8 @@ def send_smtp_batch(leads: list[dict], max_send: int = 25):
 
 
 def main():
+    print("BuildCalc Pro outreach permanently KILLED (2026-10-28). Exiting immediately.")
+    return
     parser = argparse.ArgumentParser(description="BuildCalc Pro Automated Contractor Scraper & Hormozi Outreach Bot")
     parser.add_argument("--limit", type=int, default=35, help="Max leads to scrape per run")
     parser.add_argument("--send", action="store_true", help="Send outreach emails via SMTP_USER / SMTP_PASS")
